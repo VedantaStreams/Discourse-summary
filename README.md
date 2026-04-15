@@ -8,7 +8,7 @@ A Streamlit webapp that transcribes long MP3 discourses (up to 1.5h+) and summar
 
 ### 1. Prerequisites
 
-Make sure you have **Python 3.9+** and **ffmpeg** installed.
+Install **Python 3.9+** and **ffmpeg**.
 
 **Install ffmpeg:**
 - macOS: `brew install ffmpeg`
