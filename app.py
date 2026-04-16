@@ -18,6 +18,27 @@ st.set_page_config(
 
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
+# Extra button styling for nav cards
+st.markdown("""
+<style>
+div[data-testid="column"] .stButton > button {
+    background: transparent !important;
+    color: #c9a96e !important;
+    border: 1px solid #c9a96e !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    padding: 0.35rem 1rem !important;
+    margin-top: 0.6rem;
+    width: 100%;
+    transition: all 0.2s !important;
+}
+div[data-testid="column"] .stButton > button:hover {
+    background: #c9a96e !important;
+    color: #0a0a0a !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # ── Load images ────────────────────────────────────────────────────────────────
 def img_b64(path: str, mime: str = "image/jpeg") -> str:
@@ -111,11 +132,11 @@ st.markdown("""
     spiritual discourses, lectures, and educational content. Upload <b>audio files</b> (MP3, WAV, M4A)
     or <b>video files</b> (MP4) or paste a <b>YouTube link</b> — get back a clean transcript, structured
     summary, or a beautifully formatted table of key insights. Export everything as <b>PDF or Word</b>.
-    Use the navigation on the left to get started.
+    Click any tool below to get started.
 </div>
 """, unsafe_allow_html=True)
 
-# ── Navigation cards ───────────────────────────────────────────────────────────
+# ── Navigation cards with buttons ─────────────────────────────────────────────
 st.markdown("## Choose a Tool")
 
 col1, col2, col3 = st.columns(3)
@@ -129,6 +150,8 @@ with col1:
         <div style="font-size:0.78rem; color:#666;">Upload 1–5 MP3/WAV/M4A files or one long recording</div>
     </div>
     """, unsafe_allow_html=True)
+    if st.button("🎙️ Open Audio Summarizer", key="btn_audio"):
+        st.switch_page("pages/Audio_Summarizer.py")
 
 with col2:
     st.markdown("""
@@ -139,6 +162,8 @@ with col2:
         <div style="font-size:0.78rem; color:#666;">Paste a YouTube URL or upload an MP4 file</div>
     </div>
     """, unsafe_allow_html=True)
+    if st.button("🎬 Open Video Summarizer", key="btn_video"):
+        st.switch_page("pages/Video_Summarizer.py")
 
 with col3:
     st.markdown("""
@@ -149,6 +174,7 @@ with col3:
         <div style="font-size:0.78rem; color:#666;">Merge multiple transcripts into one beautiful document</div>
     </div>
     """, unsafe_allow_html=True)
+    if st.button("📄 Open Document Combiner", key="btn_doc"):
+        st.switch_page("pages/Document_Combiner.py")
 
-st.markdown("<br/><small style='color:#333'>Use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
-
+st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
