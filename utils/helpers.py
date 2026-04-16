@@ -59,21 +59,69 @@ def extract_audio_from_video(video_path: str) -> str:
     return audio_path
 
 
+def clean_youtube_url(url: str) -> str:
+    """Strip playlist and extra parameters, keep only the video ID."""
+    import urllib.parse
+    parsed = urllib.parse.urlparse(url.strip())
+    params = urllib.parse.parse_qs(parsed.query)
+    video_id = params.get("v", [None])[0]
+    if video_id:
+        return f"https://www.youtube.com/watch?v={video_id}"
+    return url.strip()
+
+
 def download_youtube_audio(url: str) -> str:
-    """Download audio from YouTube URL using yt-dlp."""
+    """Download audio from a YouTube URL using pytubefix.""")
+    from pytubefix import YouTube
+    from pytubefix.cli import on_progress
+
+    url = clean_youtube_url(url)
     tmp_dir = tempfile.mkdtemp()
-    output_template = os.path.join(tmp_dir, "yt_audio.%(ext)s")
-    subprocess.run(
-        ["yt-dlp", "-x", "--audio-format", "mp3",
-         "--audio-quality", "4",
-         "-o", output_template, url],
-        capture_output=True
-    )
-    # Find the downloaded file
-    for f in os.listdir(tmp_dir):
-        if f.startswith("yt_audio"):
-            return os.path.join(tmp_dir, f)
-    raise FileNotFoundError("YouTube audio download failed. Check the URL and try again.")
+
+    try:
+        yt = YouTube(url, on_progress_callback=on_progress)
+        # Get the audio-only stream with highest bitrate
+        audio_stream = yt.streams.get_audio_only()
+        if audio_stream is None:
+            raise RuntimeError(
+                f"No audio stream found for: {yt.title}. "
+                "The video may be age-restricted or unavailable."
+            )
+        # Download as mp4 audio (pytubefix default) then convert to mp3
+        downloaded = audio_stream.download(output_path=tmp_dir, filename="yt_audio")
+        # Convert to mp3 using ffmpeg
+        mp3_path = os.path.join(tmp_dir, "yt_audio.mp3")
+        subprocess.run(
+            ["ffmpeg", "-y", "-i", downloaded,
+             "-acodec", "libmp3lame", "-q:a", "4", mp3_path],
+            capture_output=True
+        )
+        if os.path.exists(mp3_path) and os.path.getsize(mp3_path) > 0:
+            return mp3_path
+        # Fallback: return the original downloaded file if ffmpeg failed
+        if os.path.exists(downloaded) and os.path.getsize(downloaded) > 0:
+            return downloaded
+        raise RuntimeError("Audio conversion failed after download.")
+
+    except Exception as e:
+        err = str(e)
+        if "age" in err.lower() or "sign in" in err.lower():
+            raise RuntimeError(
+                "This video is age-restricted and cannot be downloaded. "
+                "Please use a public video without age restrictions."
+            )
+        elif "private" in err.lower() or "unavailable" in err.lower():
+            raise RuntimeError(
+                "This video is private or unavailable. "
+                "Please use a publicly accessible video."
+            )
+        elif "regex" in err.lower() or "pattern" in err.lower():
+            raise RuntimeError(
+                "Could not parse the YouTube page. "
+                "YouTube may have updated their site. Try again in a few minutes."
+            )
+        else:
+            raise RuntimeError(f"YouTube download failed: {err[:300]}")
 
 
 def prepare_audio_chunks(uploaded_files: list) -> list:
