@@ -273,3 +273,94 @@ def make_docx(title: str, content: str) -> bytes:
     buffer = io.BytesIO()
     doc.save(buffer)
     return buffer.getvalue()
+
+
+# ── Markdown table → HTML table ────────────────────────────────────────────────
+
+def markdown_table_to_html(md: str) -> str:
+    """Convert a markdown table string into a styled Excel-like HTML table."""
+    lines = [l.strip() for l in md.strip().split('\n') if l.strip()]
+    table_lines = [l for l in lines if l.startswith('|')]
+
+    if not table_lines:
+        return f'<div class="output-box">{md}</div>'
+
+    # Split rows
+    rows = []
+    for line in table_lines:
+        cells = [c.strip() for c in line.split('|')[1:-1]]
+        rows.append(cells)
+
+    # Remove separator row (---|---|---)
+    rows = [r for r in rows if not all(set(c.replace('-','').replace(':','').replace(' ','')) == set() or c.replace('-','').replace(':','').replace(' ','') == '' for c in r)]
+
+    if not rows:
+        return f'<div class="output-box">{md}</div>'
+
+    header = rows[0]
+    body = rows[1:]
+
+    # Build HTML
+    th_cells = ''.join(f'<th>{h}</th>' for h in header)
+    tbody_rows = ''
+    for i, row in enumerate(body):
+        bg = '#161616' if i % 2 == 0 else '#1a1a1a'
+        # Pad row if fewer cells than header
+        while len(row) < len(header):
+            row.append('')
+        td_cells = ''.join(f'<td>{c}</td>' for c in row)
+        tbody_rows += f'<tr style="background:{bg};">{td_cells}</tr>'
+
+    html = f"""
+<div style="overflow-x:auto; margin-top:1rem;">
+<table style="
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.85rem;
+    font-family:'DM Sans',sans-serif;
+    color:#d4c9b8;
+    border:1px solid #2a2a2a;
+    border-radius:8px;
+    overflow:hidden;
+">
+<thead>
+<tr style="background:#1e1a14; border-bottom:2px solid #c9a96e;">
+{th_cells}
+</tr>
+</thead>
+<tbody>
+{tbody_rows}
+</tbody>
+</table>
+</div>
+"""
+    return html
+
+
+TABLE_CSS = """
+<style>
+table th {
+    padding: 10px 14px;
+    text-align: left;
+    color: #c9a96e;
+    font-weight: 500;
+    font-size: 0.82rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border-right: 1px solid #2a2a2a;
+}
+table td {
+    padding: 9px 14px;
+    border-right: 1px solid #1e1e1e;
+    border-bottom: 1px solid #1e1e1e;
+    vertical-align: top;
+    line-height: 1.6;
+}
+table tr:hover td {
+    background: #222 !important;
+}
+table td:last-child, table th:last-child {
+    border-right: none;
+}
+</style>
+"""
