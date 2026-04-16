@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from utils.styles import SHARED_CSS
 from utils.helpers import (
     extract_audio_from_video, download_youtube_audio,
-    split_audio_ffmpeg, transcribe_chunks,
+    clean_youtube_url, split_audio_ffmpeg, transcribe_chunks,
     summarize_text, make_pdf, make_docx, TABLE_COLUMNS,
     markdown_table_to_html, TABLE_CSS
 )
@@ -112,9 +112,12 @@ if has_input:
 
             # Extract audio
             if yt_url and yt_url.strip():
-                status_text.markdown("**Downloading audio from YouTube…** (this may take a minute)")
+                cleaned_url = clean_youtube_url(yt_url.strip())
+                if cleaned_url != yt_url.strip():
+                    st.info(f"ℹ️ Playlist detected — using single video URL: {cleaned_url}")
+                status_text.markdown("**Connecting to YouTube and downloading audio…** (may take 1–2 mins)")
                 progress_bar.progress(0.05)
-                audio_path = download_youtube_audio(yt_url.strip())
+                audio_path = download_youtube_audio(cleaned_url)
             elif video_file:
                 status_text.markdown("**Extracting audio from video file…**")
                 progress_bar.progress(0.05)
@@ -182,4 +185,18 @@ if has_input:
                 except: pass
 
         except Exception as e:
-            st.error(f"❌ Error: {e}")
+            err = str(e)
+            st.error(f"❌ Error: {err}")
+            if "yt-dlp" in err or "YouTube" in err or "download" in err.lower():
+                st.markdown("""
+**Possible reasons the YouTube URL failed:**
+- 🔒 Video is **private** or **age-restricted**
+- 🌍 Video is **region-blocked** (not available in all countries)
+- 📋 URL contains a **playlist** — paste a single video URL instead
+- ⏳ Video is **very long** — try a shorter clip first to test
+
+**Tips:**
+- Make sure the URL looks like: 
+- Try copying the URL directly from the browser address bar
+- If the video works in your browser without signing in, it should work here
+""")
