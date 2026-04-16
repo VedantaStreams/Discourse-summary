@@ -54,7 +54,7 @@ st.markdown("""
         <div style="font-size:0.95rem; color:#aaa; line-height:1.9; font-style:italic;">
             I offer my humble pranāms and heartfelt gratitude to
             <span style="color:#c9a96e; font-style:normal; font-weight:500;">
-                Pūjya Swami Aparājitānandajī
+                Pūjya Swami Aparājitānanda jī
             </span>
             and
             <span style="color:#c9a96e; font-style:normal; font-weight:500;">
