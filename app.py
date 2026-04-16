@@ -138,7 +138,7 @@ st.markdown("""
     </div>
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
                 color:#c9a96e; font-style:italic; letter-spacing:0.5px; margin-top:0.5rem;">
-        — <em>Pūjya Swāmī Chinmayānanda</em>
+        — <em>Pūjya Swāmī Chinmayānanda jī</em>
     </div>
     <div style="font-size:0.75rem; color:#555; margin-top:0.2rem; font-style:italic; letter-spacing:0.3px;">
         (Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)
