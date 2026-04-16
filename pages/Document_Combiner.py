@@ -7,7 +7,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from utils.styles import SHARED_CSS
-from utils.helpers import summarize_text, make_pdf, make_docx, TABLE_COLUMNS
+from utils.helpers import summarize_text, make_pdf, make_docx, TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS
 
 st.set_page_config(page_title="Document Combiner · Suma AI Hub", page_icon="📄", layout="centered")
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
@@ -109,7 +109,11 @@ if uploaded_txts:
             st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
 
             st.markdown(f"#### 📄 {doc_title}")
-            st.markdown(f'<div class="output-box">{final_content}</div>', unsafe_allow_html=True)
+            if summary_style == "Structured table":
+                st.markdown(TABLE_CSS, unsafe_allow_html=True)
+                st.markdown(markdown_table_to_html(final_content), unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="output-box">{final_content}</div>', unsafe_allow_html=True)
 
             st.markdown(" ")
             dc1, dc2, dc3 = st.columns(3)
