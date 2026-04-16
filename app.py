@@ -322,7 +322,7 @@ with st.sidebar:
     the academic journeys of countless students.
     <hr class="bio-divider"/>
     In a bold and purposeful career transition, she moved into <b>AI and Data Science</b>
-    five years ago, contributing to impactful work at <b>Discover Financial Services</b> and
+    six years ago, contributing to impactful work at <b>Discover Financial Services</b> and
     currently at <b>Capital One</b>. Her expertise spans <b>Generative AI</b>, Speech Recognition
     technologies, and <b>Responsible AI</b>, where she has played a key role in developing
     guardrails for enterprise-scale AI engineering platforms.
