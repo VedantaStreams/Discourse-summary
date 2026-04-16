@@ -22,9 +22,9 @@ om_tag = f'<img class="om" src="{img_b64(str(om_path))}" alt="Om"/>' if om_path.
 
 if headshot_path.exists():
     hs_src = img_b64(str(headshot_path))
-    headshot_html = f'<img src="{hs_src}" alt="Dr. Suma Rajashankar" style="width:160px;height:160px;border-radius:50%;object-fit:cover;border:3px solid #c9a96e;display:block;margin:0 auto 1rem;"/>'
+    headshot_html = f'<img src="{hs_src}" alt="Dr. Suma Rajashankar" style="width:180px;height:180px;border-radius:50%;object-fit:cover;border:3px solid #c9a96e;display:block;margin:0 auto 1rem;box-shadow:0 0 28px rgba(201,169,110,0.35);"/>'
 else:
-    headshot_html = '<div style="width:120px;height:120px;border-radius:50%;background:#1e1e1e;border:2px solid #c9a96e;display:flex;align-items:center;justify-content:center;font-family:Cormorant Garamond,serif;font-size:2rem;color:#c9a96e;margin:0 auto 1rem;">SR</div>'
+    headshot_html = '<div style="width:160px;height:160px;border-radius:50%;background:#1e1e1e;border:2px solid #c9a96e;display:flex;align-items:center;justify-content:center;font-family:Cormorant Garamond,serif;font-size:2rem;color:#c9a96e;margin:0 auto 1rem;">SR</div>'
 
 st.markdown(f"""
 <div class="hero">
@@ -36,9 +36,9 @@ st.markdown(f"""
 st.markdown(f"""
 <div style="text-align:center; padding: 1.5rem 0 0.5rem;">
     {headshot_html}
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:600; color:#e8e0d4;">Dr. Suma Rajashankar</div>
-    <div style="font-size:0.82rem; color:#c9a96e; letter-spacing:0.8px; text-transform:uppercase; margin-top:0.3rem;">
-        Senior Data Scientist · AI Engineer · Capital One
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:#e8e0d4;">Dr. Suma Rajashankar</div>
+    <div style="font-size:0.85rem; color:#c9a96e; letter-spacing:0.8px; text-transform:uppercase; margin-top:0.3rem;">
+        Senior Data Scientist / AI Engineer · Capital One
     </div>
 </div>
 <hr style="border-color:#1e1e1e; margin: 1.2rem 0;"/>
@@ -55,7 +55,7 @@ University, where she taught across Electrical and Industrial Engineering discip
 <b style="color:#b8a88a;">15 years</b>, shaping the academic journeys of countless students.</p>
 
 <p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AI and Data Science</b>
-five years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
+six years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
 and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans
 <b style="color:#b8a88a;">Generative AI</b>, Speech Recognition technologies, and
 <b style="color:#b8a88a;">Responsible AI</b>, where she has played a key role in developing guardrails
@@ -92,15 +92,17 @@ for col, num, label in [
         </div>
         """, unsafe_allow_html=True)
 
+# ── Quote with styled Swamiji name ────────────────────────────────────────────
 st.markdown("""
 <hr style="border-color:#1e1e1e; margin: 1.5rem 0;"/>
-<div style="text-align:center;">
-    <div class="quote-text" style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; color:#c9a96e; line-height:1.7;">
+<div style="text-align:center; padding: 0.5rem 0 1.5rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.15rem; color:#c9a96e; line-height:1.8;">
         "Renounce your ego" is the Lord's only request;<br/>
         "And I will make you God" is the promise.
     </div>
-    <div style="font-size:0.75rem; color:#555; letter-spacing:0.8px; margin-top:0.5rem; text-transform:uppercase;">
-        — Swami Chinmayananda
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:#c9a96e;
+                font-style:italic; letter-spacing:0.5px; margin-top:0.6rem;">
+        — <em>Swami Chinmayananda</em>
     </div>
 </div>
 """, unsafe_allow_html=True)
