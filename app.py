@@ -99,6 +99,24 @@ with st.sidebar:
     st.session_state["openai_key"] = openai_key
 
     st.markdown("---")
+
+    # ── Reverence & Gratitude ──────────────────────────────────────────────────
+    st.markdown("""
+<div style="background:#0d0d0d; border-left:2px solid #c9a96e; padding:0.8rem 1rem; border-radius:6px; margin-bottom:0.5rem;">
+    <div style="font-size:0.78rem; color:#c9a96e; font-weight:500; letter-spacing:0.4px; margin-bottom:0.5rem;">
+        🔹 With Reverence and Gratitude
+    </div>
+    <div style="font-size:0.75rem; color:#777; line-height:1.75; font-style:italic;">
+        I offer my humble pran&#257;ms and heartfelt gratitude to
+        P&#363;jya Swami Apar&#257;jit&#257;nandaj&#299; and
+        P&#363;jya Sw&#257;m&#299; &#346;ara&#7751;&#257;nanda j&#299;.
+        Their teachings, guidance, and unwavering dedication to the
+        Guru&#8211;&#346;i&#7779;ya Parampar&#257; continue to inspire
+        and shape this humble effort.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
     st.markdown("<small style='color:#444'>🕉️ Suma AI Hub · Built with Streamlit, Whisper & Claude</small>", unsafe_allow_html=True)
 
 
