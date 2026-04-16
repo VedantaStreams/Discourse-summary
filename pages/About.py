@@ -54,7 +54,7 @@ She went on to serve as an <b style="color:#b8a88a;">Assistant Professor</b> at 
 University, where she taught across Electrical and Industrial Engineering disciplines for over
 <b style="color:#b8a88a;">15 years</b>, shaping the academic journeys of countless students.</p>
 
-<p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AI and Data Science</b>
+<p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AIML and Data Science Domain</b>
 six years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
 and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans
 <b style="color:#b8a88a;">Generative AI</b>, Speech Recognition technologies, and
