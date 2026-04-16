@@ -62,56 +62,45 @@ with tab_yt:
     st.markdown("""
 <div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
             padding:1.4rem 1.8rem; margin-bottom:1rem;">
-
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:1rem; font-weight:600;">
-        Method 1 — 4K Video Downloader (Recommended ⭐)
+                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
+        ⭐ Method 1 — 4K Video Downloader (Recommended)
     </div>
-
     <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Download <b>4K Video Downloader</b> (free) from
-        <a href="https://www.4kdownload.com" target="_blank"
-           style="color:#c9a96e;">4kdownload.com</a><br/>
-        <b style="color:#b8a88a;">Step 2</b> — Open the app and click <b>"Paste Link"</b><br/>
-        <b style="color:#b8a88a;">Step 3</b> — In the popup, select <b>"Extract Audio"</b>
-        → Format: <b>MP3</b> → Click <b>Download</b><br/>
-        <b style="color:#b8a88a;">Step 4</b> — Come back here and upload the MP3 in the
-        <b>Audio Summarizer</b> page
+        <b style="color:#b8a88a;">Step 1</b> — Download <b>4K Video Downloader</b> free from 4kdownload.com<br/>
+        <b style="color:#b8a88a;">Step 2</b> — Open app and click <b>Paste Link</b><br/>
+        <b style="color:#b8a88a;">Step 3</b> — Select <b>Extract Audio</b> → Format: <b>MP3</b> → Download<br/>
+        <b style="color:#b8a88a;">Step 4</b> — Upload the MP3 in the Audio Summarizer page
     </div>
 </div>
+""", unsafe_allow_html=True)
 
+    st.markdown("""
 <div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
             padding:1.4rem 1.8rem; margin-bottom:1rem;">
-
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:1rem; font-weight:600;">
-        Method 2 — Online Audio Extractor
+                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
+        🌐 Method 2 — Online Audio Extractor
     </div>
-
     <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Go to
-        <a href="https://yt1s.com" target="_blank" style="color:#c9a96e;">yt1s.com</a>
-        or
-        <a href="https://ytmp3.cc" target="_blank" style="color:#c9a96e;">ytmp3.cc</a><br/>
+        <b style="color:#b8a88a;">Step 1</b> — Go to yt1s.com or ytmp3.cc in your browser<br/>
         <b style="color:#b8a88a;">Step 2</b> — Paste your YouTube URL and download as <b>MP3</b><br/>
-        <b style="color:#b8a88a;">Step 3</b> — Upload the MP3 in the <b>Audio Summarizer</b> page
+        <b style="color:#b8a88a;">Step 3</b> — Upload the MP3 in the Audio Summarizer page
     </div>
 </div>
+""", unsafe_allow_html=True)
 
+    st.markdown("""
 <div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
             padding:1.4rem 1.8rem; margin-bottom:1rem;">
-
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:1rem; font-weight:600;">
-        Method 3 — Download MP4 and Upload Below
+                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
+        🎬 Method 3 — Download MP4 and Upload Below
     </div>
-
     <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Download the video as <b>MP4</b> using
-        4K Video Downloader or any tool<br/>
-        <b style="color:#b8a88a;">Step 2</b> — Switch to the <b>📁 Upload MP4</b> tab above<br/>
-        <b style="color:#b8a88a;">Step 3</b> — Upload the MP4 — audio is extracted automatically
-        and summarized here
+        <b style="color:#b8a88a;">Step 1</b> — Download the video as <b>MP4</b> using 4K Video Downloader<br/>
+        <b style="color:#b8a88a;">Step 2</b> — Switch to the <b>Upload MP4</b> tab above<br/>
+        <b style="color:#b8a88a;">Step 3</b> — Upload the MP4 — audio extracted and summarized automatically
     </div>
 </div>
 """, unsafe_allow_html=True)
