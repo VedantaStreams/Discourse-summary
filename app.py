@@ -172,7 +172,7 @@ with col1:
     </div>
     """, unsafe_allow_html=True)
     if st.button("🎙️ Open Audio Summarizer", key="btn_audio"):
-        st.switch_page("pages/Audio_Summarizer.py")
+        st.switch_page("pages/2_Audio_Summarizer.py")
 
 with col2:
     st.markdown("""
@@ -184,7 +184,7 @@ with col2:
     </div>
     """, unsafe_allow_html=True)
     if st.button("🎬 Open Video Summarizer", key="btn_video"):
-        st.switch_page("pages/Video_Summarizer.py")
+        st.switch_page("pages/4_Video_Summarizer.py")
 
 with col3:
     st.markdown("""
@@ -196,6 +196,6 @@ with col3:
     </div>
     """, unsafe_allow_html=True)
     if st.button("📄 Open Document Combiner", key="btn_doc"):
-        st.switch_page("pages/Document_Combiner.py")
+        st.switch_page("pages/3_Document_Combiner_new.py")
 
 st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
