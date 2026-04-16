@@ -61,11 +61,11 @@ and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans 
 <b style="color:#b8a88a;">Responsible AI</b>, where she has played a key role in developing guardrails
 for enterprise-scale AI engineering platforms.</p>
 
-<p>Beyond her professional pursuits, Dr. Rajashankar has a deep and abiding interest in philosophy,
-particularly the study of <b style="color:#b8a88a;">Vedanta</b>. She has been closely associated with
-the <b style="color:#b8a88a;">Chinmaya Mission</b> for over two decades and finds great joy in the
-systematic study of the Upanishads, the Bhagavad Gita, and traditional Prakarana Granthas, reflecting
-a lifelong commitment to inner growth and inquiry.</p>
+Beyond her professional pursuits, Dr. Rajashankar has been a student of
+<b style="color:#b8a88a;">Vedanta</b> for many years. Through her association with the
+<b style="color:#b8a88a;">Chinmaya Mission</b>, she has been part of study groups and satsangs,
+learning from the Upanishads, the Bhagavad Gita, and the Prakarana Granthas. This study remains
+a personal journey of reflection and understanding.
 
 <p>Driven by a passion for both knowledge and mentorship, she actively guides working professionals
 through <b style="color:#b8a88a;">AIML and AIDL programs</b> in collaboration with the
