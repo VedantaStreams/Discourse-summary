@@ -312,7 +312,7 @@ with st.sidebar:
     # ── About Me ───────────────────────────────────────────────────────────────
     st.markdown("""
 <div class="bio-header">🕉️ About Me</div>
-<div class="bio-name">Suma Rajashankar</div>
+<div class="bio-name">Dr. Suma Rajashankar</div>
 <div class="bio-role">Senior Data Scientist · AI Engineer · Capital One</div>
 <div class="bio-text">
     I hold a <b>PhD in Physics</b> from the Indian Institute of Science and completed
