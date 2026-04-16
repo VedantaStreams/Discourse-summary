@@ -56,8 +56,8 @@ University, where she taught across Electrical and Industrial Engineering discip
 
 <p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AIML and Data Science Domain</b>
 six years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
-and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans
-<b style="color:#b8a88a;">Generative AI</b>, Speech Recognition technologies, and
+and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans building 
+<b style="color:#b8a88a;">ML Models, Generative AI</b>, Speech Recognition Technologies, and
 <b style="color:#b8a88a;">Responsible AI</b>, where she has played a key role in developing guardrails
 for enterprise-scale AI engineering platforms.</p>
 
