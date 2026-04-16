@@ -9,7 +9,8 @@ if str(ROOT) not in sys.path:
 from utils.styles import SHARED_CSS
 from utils.helpers import (
     prepare_audio_chunks, transcribe_chunks,
-    summarize_text, make_pdf, make_docx, TABLE_COLUMNS
+    summarize_text, make_pdf, make_docx, TABLE_COLUMNS,
+    markdown_table_to_html, TABLE_CSS
 )
 import time
 
@@ -117,7 +118,11 @@ if uploaded_files:
             st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
 
             st.markdown("#### 📝 Summary")
-            st.markdown(f'<div class="output-box">{summary}</div>', unsafe_allow_html=True)
+            if summary_style == "Structured table":
+                st.markdown(TABLE_CSS, unsafe_allow_html=True)
+                st.markdown(markdown_table_to_html(summary), unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="output-box">{summary}</div>', unsafe_allow_html=True)
 
             # ── Downloads ──────────────────────────────────────────────────────
             st.markdown(" ")
