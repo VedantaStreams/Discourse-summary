@@ -54,18 +54,18 @@ She went on to serve as an <b style="color:#b8a88a;">Assistant Professor</b> at 
 University, where she taught across Electrical and Industrial Engineering disciplines for over
 <b style="color:#b8a88a;">15 years</b>, shaping the academic journeys of countless students.</p>
 
-<p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AIML and Data Science Domain</b>
-six years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
-and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans building 
-<b style="color:#b8a88a;">ML Models, Generative AI</b>, Speech Recognition Technologies, and
+<p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AI and Data Science</b>
+five years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
+and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans
+<b style="color:#b8a88a;">Generative AI</b>, Speech Recognition technologies, and
 <b style="color:#b8a88a;">Responsible AI</b>, where she has played a key role in developing guardrails
 for enterprise-scale AI engineering platforms.</p>
 
-Beyond her professional pursuits, Dr. Rajashankar has been a student of
-<b style="color:#b8a88a;">Vedanta</b> for many years. Through her association with the
-<b style="color:#b8a88a;">Chinmaya Mission</b>, she has been part of study groups and satsangs,
-learning from the Upanishads, the Bhagavad Gita, and the Prakarana Granthas. This study remains
-a personal journey of reflection and understanding.
+<p>Beyond her professional pursuits, Dr. Rajashankar has a deep and abiding interest in philosophy,
+particularly the study of <b style="color:#b8a88a;">Vedanta</b>. She has been closely associated with
+the <b style="color:#b8a88a;">Chinmaya Mission</b> for over two decades and finds great joy in the
+systematic study of the Upanishads, the Bhagavad Gita, and traditional Prakarana Granthas, reflecting
+a lifelong commitment to inner growth and inquiry.</p>
 
 <p>Driven by a passion for both knowledge and mentorship, she actively guides working professionals
 through <b style="color:#b8a88a;">AIML and AIDL programs</b> in collaboration with the
@@ -102,7 +102,10 @@ st.markdown("""
     </div>
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:#c9a96e;
                 font-style:italic; letter-spacing:0.5px; margin-top:0.6rem;">
-        — <em>Swami Chinmayananda</em>
+        — <em>Pūjya Swāmī Chinmayānanda</em>
+    </div>
+    <div style="font-size:0.75rem; color:#555; margin-top:0.2rem; font-style:italic; letter-spacing:0.3px;">
+        (Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)
     </div>
 </div>
 """, unsafe_allow_html=True)
