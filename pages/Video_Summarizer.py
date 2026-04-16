@@ -9,7 +9,8 @@ from utils.styles import SHARED_CSS
 from utils.helpers import (
     extract_audio_from_video, download_youtube_audio,
     split_audio_ffmpeg, transcribe_chunks,
-    summarize_text, make_pdf, make_docx, TABLE_COLUMNS
+    summarize_text, make_pdf, make_docx, TABLE_COLUMNS,
+    markdown_table_to_html, TABLE_CSS
 )
 
 st.set_page_config(page_title="Video Summarizer · Suma AI Hub", page_icon="🎬", layout="centered")
@@ -142,7 +143,11 @@ if has_input:
             st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
 
             st.markdown("#### 📝 Summary")
-            st.markdown(f'<div class="output-box">{summary}</div>', unsafe_allow_html=True)
+            if summary_style == "Structured table":
+                st.markdown(TABLE_CSS, unsafe_allow_html=True)
+                st.markdown(markdown_table_to_html(summary), unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="output-box">{summary}</div>', unsafe_allow_html=True)
 
             st.markdown(" ")
             dc1, dc2, dc3 = st.columns(3)
