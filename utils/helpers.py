@@ -122,23 +122,35 @@ def transcribe_chunks(chunks: list, openai_key: str, progress_bar=None, status_t
 
 # ── Summarization ──────────────────────────────────────────────────────────────
 
+TRANSLITERATION_NOTE = (
+    "When Sanskrit or regional language terms appear in the discourse, "
+    "retain them and provide their English transliteration in parentheses immediately after. "
+    "For example: Atman (the Self), Brahman (the Absolute), Maya (illusion). "
+    "Keep all output in English. "
+)
+
 STYLE_PROMPTS = {
     "Bullet highlights": (
+        TRANSLITERATION_NOTE +
         "Summarize the following discourse as clear bullet points grouped under bold thematic headers. "
         "Each bullet should be concise and capture a key idea."
     ),
     "Main takeaways": (
+        TRANSLITERATION_NOTE +
         "List only the top 8–10 main takeaways from this discourse, numbered, each in one or two sentences."
     ),
     "Detailed paragraphs": (
+        TRANSLITERATION_NOTE +
         "Write a detailed, well-structured summary in prose paragraphs covering all major themes, "
         "arguments, and conclusions."
     ),
     "Executive brief": (
+        TRANSLITERATION_NOTE +
         "Write a crisp executive brief (max 300 words). Lead with the key message, "
         "then main points and any action items."
     ),
     "Academic digest": (
+        TRANSLITERATION_NOTE +
         "Produce an academic-style digest with sections: Overview, Key Arguments, "
         "Evidence/Examples, Conclusions, and Notable Quotes."
     ),
