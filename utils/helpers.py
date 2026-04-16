@@ -71,7 +71,7 @@ def clean_youtube_url(url: str) -> str:
 
 
 def download_youtube_audio(url: str) -> str:
-    """Download audio from a YouTube URL using pytubefix.""")
+    """Download audio from a YouTube URL using pytubefix."""
     from pytubefix import YouTube
     from pytubefix.cli import on_progress
 
