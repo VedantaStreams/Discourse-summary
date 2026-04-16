@@ -10,10 +10,10 @@ A multi-page AI-powered platform for transcribing and summarizing spiritual disc
 sumaaihub/
 ├── app.py                        ← Main home page & navigation
 ├── pages/
-│   ├── 1_Audio_Summarizer.py    ← Upload MP3/WAV/M4A (up to 5 files)
-│   ├── 2_Video_Summarizer.py    ← YouTube URL or MP4 upload
-│   ├── 3_Document_Combiner.py   ← Merge multiple transcripts
-│   └── 4_About.py               ← Full bio page
+│   ├── Audio_Summarizer.py    ← Upload MP3/WAV/M4A (up to 5 files)
+│   ├── Video_Summarizer.py    ← YouTube URL or MP4 upload
+│   ├── Document_Combiner.py   ← Merge multiple transcripts
+│   └── About.py               ← Full bio page
 ├── utils/
 │   ├── styles.py                ← Shared CSS styles
 │   └── helpers.py               ← Transcription, summarization, export logic
