@@ -72,46 +72,33 @@ with tab_yt:
 """, unsafe_allow_html=True)
 
     # ── 4K Downloader instructions card ───────────────────────────────────────
-    st.markdown("""
-<div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
-            padding:1.4rem 1.8rem; margin-bottom:1.2rem;">
-
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; font-weight:600; margin-bottom:0.8rem;">
-        🖥️ Step 1 — Download audio using 4K Video Downloader
-    </div>
-
-    <div style="font-size:0.84rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">1.</b> Download the free app from
-        <a href="https://www.4kdownload.com/products/videodownloader"
-           target="_blank"
-           style="color:#c9a96e; text-decoration:none; border-bottom:1px dashed #c9a96e;">
-            4kdownload.com/products/videodownloader
-        </a><br/>
-        <b style="color:#b8a88a;">2.</b> Open the app → click <b>Paste Link</b><br/>
-        <b style="color:#b8a88a;">3.</b> In the popup → select <b>Extract Audio</b>
-        → Format: <b>MP3</b> → click <b>Download</b><br/>
-        <b style="color:#b8a88a;">4.</b> Upload the downloaded MP3 below ↓
-    </div>
-
-    <div style="margin-top:0.8rem;">
-        <a href="https://www.4kdownload.com/products/videodownloader"
-           target="_blank"
-           style="display:inline-block; background:#c9a96e; color:#0a0a0a;
-                  font-size:0.82rem; font-weight:500; padding:0.4rem 1.2rem;
-                  border-radius:6px; text-decoration:none;">
-            ⬇️ Download 4K Video Downloader (Free)
-        </a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px; padding:1.4rem 1.8rem; margin-bottom:1.2rem;'>"
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem; color:#c9a96e; font-weight:600; margin-bottom:0.8rem;'>"
+        "&#x1F5A5;&#xFE0F; Step 1 &#8212; Download audio using 4K Video Downloader"
+        "</div>"
+        "<div style='font-size:0.84rem; color:#888; line-height:1.9;'>"
+        "<b style='color:#b8a88a;'>1.</b> Download the free app from "
+        "<a href='https://www.4kdownload.com/products/videodownloader' target='_blank' style='color:#c9a96e;'>4kdownload.com</a><br/>"
+        "<b style='color:#b8a88a;'>2.</b> Open the app and click <b>Paste Link</b><br/>"
+        "<b style='color:#b8a88a;'>3.</b> Select <b>Extract Audio</b>, Format: <b>MP3</b>, click <b>Download</b><br/>"
+        "<b style='color:#b8a88a;'>4.</b> Upload the downloaded MP3 below"
+        "</div>"
+        "<div style='margin-top:0.8rem;'>"
+        "<a href='https://www.4kdownload.com/products/videodownloader' target='_blank' "
+        "style='display:inline-block; background:#c9a96e; color:#0a0a0a; font-size:0.82rem; font-weight:500; padding:0.4rem 1.2rem; border-radius:6px; text-decoration:none;'>"
+        "Download 4K Video Downloader (Free)"
+        "</a></div></div>",
+        unsafe_allow_html=True
+    )
 
     # ── URL cleaner ───────────────────────────────────────────────────────────
-    st.markdown("""
-<div style="font-size:0.82rem; color:#666; margin-bottom:0.4rem;">
-    💡 Paste your YouTube URL below to get a clean link to use in 4K Downloader:
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(
+        "<div style='font-size:0.82rem; color:#666; margin-bottom:0.4rem;'>"
+        "💡 Paste your YouTube URL below to get a clean link for 4K Downloader:"
+        "</div>",
+        unsafe_allow_html=True
+    )
 
     raw_url = st.text_input(
         "Paste YouTube URL (optional — to get clean link)",
@@ -126,12 +113,13 @@ with tab_yt:
     st.markdown(" ")
 
     # ── Nested Audio Upload ────────────────────────────────────────────────────
-    st.markdown("""
-<div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-            color:#c9a96e; font-weight:600; margin-bottom:0.5rem;">
-    🎵 Step 2 — Upload the downloaded MP3 here
-</div>
-""", unsafe_allow_html=True)
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem; "
+        "color:#c9a96e; font-weight:600; margin-bottom:0.5rem;'>"
+        "🎵 Step 2 &#8212; Upload the downloaded MP3 here"
+        "</div>",
+        unsafe_allow_html=True
+    )
 
     uploaded_mp3 = st.file_uploader(
         "Upload MP3 from 4K Video Downloader",
