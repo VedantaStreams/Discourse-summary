@@ -20,27 +20,36 @@ st.markdown(SHARED_CSS, unsafe_allow_html=True)
 st.markdown("""
 <div class="hero">
     <h1>📱 Get the <span class="accent">App</span></h1>
-    <p class="subtitle">Use the Discourse Summarizer on your iPhone or Android</p>
+    <p class="subtitle">Use the Discourse Summarizer on your iPhone, Android, or Desktop</p>
 </div>
 """, unsafe_allow_html=True)
 
 
-# ── Intro ──────────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="about-box">
-    The <b>Discourse Summarizer</b> is available as a web app that works beautifully
-    on any device — iPhone, Android, tablet, or desktop. No app store download needed.
-    Simply add it to your home screen and it works just like a native app.
-    A dedicated mobile app is also coming soon.
-</div>
-""", unsafe_allow_html=True)
+# ── Usage Policy Banner ────────────────────────────────────────────────────────
+st.markdown(
+    "<div style='background:#1a1200; border:1px solid #c9a96e; border-radius:12px;"
+    " padding:1.2rem 1.6rem; margin-bottom:1.5rem;'>"
+    "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+    " color:#c9a96e; font-weight:600; margin-bottom:0.6rem;'>"
+    "&#x1F4CB; Usage Policy</div>"
+    "<div style='font-size:0.84rem; color:#aaa; line-height:1.85;'>"
+    "This app is offered as a <b style='color:#b8a88a;'>free resource</b> for students, "
+    "mentees, and fellow Vedanta seekers. Each user may use the app up to "
+    "<b style='color:#c9a96e;'>5 times</b> using the shared access provided.<br/><br/>"
+    "After 5 uses, you are kindly requested to <b style='color:#b8a88a;'>set up your own "
+    "API keys</b> — both are free to start and cost only a few cents per session. "
+    "Full setup instructions are in the <b style='color:#b8a88a;'>API Setup</b> tab below."
+    "</div></div>",
+    unsafe_allow_html=True
+)
 
 
-# ── Tabs for iPhone and Android ────────────────────────────────────────────────
-tab_iphone, tab_android, tab_share = st.tabs([
+# ── Tabs ───────────────────────────────────────────────────────────────────────
+tab_iphone, tab_android, tab_api, tab_share = st.tabs([
     "🍎 iPhone",
     "🤖 Android",
-    "🔗 Share with Mentees"
+    "🔑 API Setup (After 5 Uses)",
+    "🔗 Share with Others"
 ])
 
 
@@ -50,24 +59,22 @@ tab_iphone, tab_android, tab_share = st.tabs([
 with tab_iphone:
 
     st.markdown(
-        "<div style='font-family:Cormorant Garamond,serif; font-size:1.2rem;"
-        " color:#c9a96e; font-weight:600; margin:1rem 0 0.5rem;'>"
-        "Add to iPhone Home Screen (Recommended)</div>",
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.15rem;"
+        " color:#c9a96e; font-weight:600; margin:1rem 0 0.6rem;'>"
+        "Add to iPhone Home Screen</div>",
         unsafe_allow_html=True
     )
 
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
         " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.84rem; color:#888; line-height:2;'>"
-        "<b style='color:#b8a88a;'>Step 1.</b> Open <b>Safari</b> on your iPhone<br/>"
-        "<b style='color:#b8a88a;'>Step 2.</b> Go to your Streamlit app URL<br/>"
-        "<b style='color:#b8a88a;'>Step 3.</b> Tap the <b>Share button</b> "
-        "(the square with an arrow at the bottom of Safari)<br/>"
-        "<b style='color:#b8a88a;'>Step 4.</b> Scroll down and tap "
-        "<b>Add to Home Screen</b><br/>"
-        "<b style='color:#b8a88a;'>Step 5.</b> Tap <b>Add</b> in the top right<br/>"
-        "<b style='color:#b8a88a;'>Step 6.</b> The app icon appears on your home screen!"
+        "<div style='font-size:0.84rem; color:#888; line-height:2.1;'>"
+        "<b style='color:#b8a88a;'>1.</b> Open <b>Safari</b> on your iPhone<br/>"
+        "<b style='color:#b8a88a;'>2.</b> Visit your app URL<br/>"
+        "<b style='color:#b8a88a;'>3.</b> Tap the <b>Share button</b> "
+        "(square with arrow, bottom of screen)<br/>"
+        "<b style='color:#b8a88a;'>4.</b> Scroll and tap <b>Add to Home Screen</b><br/>"
+        "<b style='color:#b8a88a;'>5.</b> Tap <b>Add</b> — icon appears on home screen!"
         "</div></div>",
         unsafe_allow_html=True
     )
@@ -75,39 +82,32 @@ with tab_iphone:
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a;"
         " border-left:3px solid #c9a96e; border-radius:8px;"
-        " padding:0.8rem 1.2rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.82rem; color:#888; line-height:1.8;'>"
-        "✅ Works offline for the UI<br/>"
-        "✅ Looks and feels like a native app<br/>"
-        "✅ No App Store download needed<br/>"
-        "✅ Free forever<br/>"
-        "✅ Always up to date automatically"
+        " padding:0.8rem 1.2rem; margin-bottom:1.2rem;'>"
+        "<div style='font-size:0.82rem; color:#888; line-height:1.85;'>"
+        "&#x2705; No App Store download needed<br/>"
+        "&#x2705; Looks and feels like a native app<br/>"
+        "&#x2705; Free to use (first 5 sessions)<br/>"
+        "&#x2705; Always up to date automatically<br/>"
+        "&#x2705; Works on iPhone and iPad"
         "</div></div>",
         unsafe_allow_html=True
     )
 
     st.markdown(
-        "<div style='font-family:Cormorant Garamond,serif; font-size:1.1rem;"
-        " color:#c9a96e; font-weight:600; margin:1.5rem 0 0.5rem;'>"
-        "Coming Soon — Native iPhone App</div>",
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:1rem 0 0.4rem;'>"
+        "Native iPhone App — Coming Soon</div>",
         unsafe_allow_html=True
     )
-
     st.markdown(
-        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
-        " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.84rem; color:#888; line-height:1.8;'>"
-        "A dedicated <b style='color:#b8a88a;'>native iPhone app</b> built with Flutter "
-        "is planned for the App Store. It will include:<br/><br/>"
-        "&#x2022; Record audio directly on your phone<br/>"
-        "&#x2022; Upload from Voice Memos or Files app<br/>"
-        "&#x2022; Transcribe and summarize on the go<br/>"
-        "&#x2022; Save summaries to your Notes app<br/><br/>"
-        "<b style='color:#b8a88a;'>Interested in being notified when it launches?</b><br/>"
-        "Send an email to "
-        "<a href='mailto:vedantavani.manana@gmail.com'"
-        " style='color:#c9a96e;'>vedantavani.manana@gmail.com</a>"
-        " with subject: <i>App Notification</i>"
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:10px;"
+        " padding:1.1rem 1.4rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.8;'>"
+        "A dedicated native iPhone app (built with Flutter) is planned for the "
+        "App Store with features like direct audio recording and Voice Memos import.<br/><br/>"
+        "To be notified at launch, email "
+        "<a href='mailto:vedantavani.manana@gmail.com' style='color:#c9a96e;'>"
+        "vedantavani.manana@gmail.com</a> with subject: <i>iPhone App Notification</i>"
         "</div></div>",
         unsafe_allow_html=True
     )
@@ -119,23 +119,21 @@ with tab_iphone:
 with tab_android:
 
     st.markdown(
-        "<div style='font-family:Cormorant Garamond,serif; font-size:1.2rem;"
-        " color:#c9a96e; font-weight:600; margin:1rem 0 0.5rem;'>"
-        "Add to Android Home Screen (Recommended)</div>",
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.15rem;"
+        " color:#c9a96e; font-weight:600; margin:1rem 0 0.6rem;'>"
+        "Add to Android Home Screen</div>",
         unsafe_allow_html=True
     )
 
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
         " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.84rem; color:#888; line-height:2;'>"
-        "<b style='color:#b8a88a;'>Step 1.</b> Open <b>Chrome</b> on your Android phone<br/>"
-        "<b style='color:#b8a88a;'>Step 2.</b> Go to your Streamlit app URL<br/>"
-        "<b style='color:#b8a88a;'>Step 3.</b> Tap the <b>three dots menu</b> "
-        "(top right corner)<br/>"
-        "<b style='color:#b8a88a;'>Step 4.</b> Tap <b>Add to Home screen</b><br/>"
-        "<b style='color:#b8a88a;'>Step 5.</b> Tap <b>Add</b> to confirm<br/>"
-        "<b style='color:#b8a88a;'>Step 6.</b> The app icon appears on your home screen!"
+        "<div style='font-size:0.84rem; color:#888; line-height:2.1;'>"
+        "<b style='color:#b8a88a;'>1.</b> Open <b>Chrome</b> on your Android phone<br/>"
+        "<b style='color:#b8a88a;'>2.</b> Visit your app URL<br/>"
+        "<b style='color:#b8a88a;'>3.</b> Tap the <b>three dots menu</b> (top right)<br/>"
+        "<b style='color:#b8a88a;'>4.</b> Tap <b>Add to Home screen</b><br/>"
+        "<b style='color:#b8a88a;'>5.</b> Tap <b>Add</b> — icon appears on home screen!"
         "</div></div>",
         unsafe_allow_html=True
     )
@@ -143,126 +141,232 @@ with tab_android:
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a;"
         " border-left:3px solid #c9a96e; border-radius:8px;"
-        " padding:0.8rem 1.2rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.82rem; color:#888; line-height:1.8;'>"
-        "✅ Works on all Android phones and tablets<br/>"
-        "✅ Looks and feels like a native app<br/>"
-        "✅ No Play Store download needed<br/>"
-        "✅ Free forever<br/>"
-        "✅ Always up to date automatically"
+        " padding:0.8rem 1.2rem; margin-bottom:1.2rem;'>"
+        "<div style='font-size:0.82rem; color:#888; line-height:1.85;'>"
+        "&#x2705; No Play Store download needed<br/>"
+        "&#x2705; Works on all Android phones and tablets<br/>"
+        "&#x2705; Free to use (first 5 sessions)<br/>"
+        "&#x2705; Always up to date automatically<br/>"
+        "&#x2705; Works on Chrome and Samsung Internet"
         "</div></div>",
         unsafe_allow_html=True
     )
 
     st.markdown(
-        "<div style='font-family:Cormorant Garamond,serif; font-size:1.1rem;"
-        " color:#c9a96e; font-weight:600; margin:1.5rem 0 0.5rem;'>"
-        "Coming Soon — Native Android App</div>",
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:1rem 0 0.4rem;'>"
+        "Native Android App — Coming Soon</div>",
         unsafe_allow_html=True
     )
-
     st.markdown(
-        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
-        " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
-        "<div style='font-size:0.84rem; color:#888; line-height:1.8;'>"
-        "A dedicated <b style='color:#b8a88a;'>native Android app</b> built with Flutter "
-        "is planned for the Google Play Store. It will include:<br/><br/>"
-        "&#x2022; Record audio directly on your phone<br/>"
-        "&#x2022; Upload from any file manager or recorder<br/>"
-        "&#x2022; Transcribe and summarize on the go<br/>"
-        "&#x2022; Save summaries to Google Drive or Notes<br/><br/>"
-        "<b style='color:#b8a88a;'>Interested in being notified when it launches?</b><br/>"
-        "Send an email to "
-        "<a href='mailto:vedantavani.manana@gmail.com'"
-        " style='color:#c9a96e;'>vedantavani.manana@gmail.com</a>"
-        " with subject: <i>App Notification</i>"
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:10px;"
+        " padding:1.1rem 1.4rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.8;'>"
+        "A dedicated native Android app (built with Flutter) is planned for the "
+        "Google Play Store with features like direct audio recording and file manager import.<br/><br/>"
+        "To be notified at launch, email "
+        "<a href='mailto:vedantavani.manana@gmail.com' style='color:#c9a96e;'>"
+        "vedantavani.manana@gmail.com</a> with subject: <i>Android App Notification</i>"
         "</div></div>",
         unsafe_allow_html=True
     )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SHARE WITH MENTEES TAB
+# API SETUP TAB
 # ══════════════════════════════════════════════════════════════════════════════
-with tab_share:
-
-    st.markdown(
-        "<div style='font-family:Cormorant Garamond,serif; font-size:1.2rem;"
-        " color:#c9a96e; font-weight:600; margin:1rem 0 0.5rem;'>"
-        "Share with Your Mentees</div>",
-        unsafe_allow_html=True
-    )
+with tab_api:
 
     st.markdown(
         "<div class='about-box'>"
-        "Share the Discourse Summarizer with your mentees, students, and fellow "
-        "Vedanta seekers. They can use it on any device — phone, tablet, or desktop "
-        "— with no download or installation required."
+        "After your first <b>5 free uses</b>, you will need your own API keys to continue. "
+        "Both keys are <b>free to set up</b> and cost only a few cents per session. "
+        "Follow the steps below for each key."
         "</div>",
         unsafe_allow_html=True
     )
 
-    # Share options
+    # Cost table
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "What Does It Cost?</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:10px;"
+        " padding:1.1rem 1.4rem; margin-bottom:1.2rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.9;'>"
+        "<b style='color:#b8a88a;'>OpenAI (Whisper transcription)</b><br/>"
+        "&#x2022; Free credits when you sign up<br/>"
+        "&#x2022; ~$0.006 per minute of audio after that<br/>"
+        "&#x2022; A 20-min discourse costs about <b style='color:#c9a96e;'>$0.12</b><br/>"
+        "&#x2022; A 1.5-hour discourse costs about <b style='color:#c9a96e;'>$0.54</b><br/><br/>"
+        "<b style='color:#b8a88a;'>Anthropic (Claude summarization)</b><br/>"
+        "&#x2022; Free credits when you sign up<br/>"
+        "&#x2022; ~$0.01 to $0.05 per summary<br/>"
+        "&#x2022; <b style='color:#c9a96e;'>$5 in credits = hundreds of summaries</b>"
+        "</div></div>",
+        unsafe_allow_html=True
+    )
+
+    # OpenAI setup
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "Step 1 — Get Your OpenAI API Key (Whisper)</div>",
+        unsafe_allow_html=True
+    )
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
-        " padding:1.4rem 1.8rem; margin-bottom:0.8rem;'>"
-        "<div style='font-family:Cormorant Garamond,serif; font-size:0.95rem;"
-        " color:#c9a96e; font-weight:600; margin-bottom:0.6rem;'>&#x1F4E7; Share by Email</div>"
-        "<div style='font-size:0.83rem; color:#888; line-height:1.8;'>"
-        "Send your mentees this message:<br/><br/>"
-        "<div style='background:#0d0d0d; border:1px solid #1e1e1e; border-radius:8px;"
-        " padding:0.8rem 1rem; font-style:italic; color:#666; font-size:0.8rem;'>"
+        " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
+        "<div style='font-size:0.84rem; color:#888; line-height:2;'>"
+        "<b style='color:#b8a88a;'>1.</b> Go to "
+        "<a href='https://platform.openai.com/signup' target='_blank'"
+        " style='color:#c9a96e;'>platform.openai.com/signup</a> "
+        "and create a free account<br/>"
+        "<b style='color:#b8a88a;'>2.</b> Once logged in, click your profile icon "
+        "&#8594; <b>API Keys</b><br/>"
+        "<b style='color:#b8a88a;'>3.</b> Click <b>Create new secret key</b><br/>"
+        "<b style='color:#b8a88a;'>4.</b> Copy the key — it starts with <b>sk-</b><br/>"
+        "<b style='color:#b8a88a;'>5.</b> Go to <b>Billing</b> &#8594; add $5 credit<br/>"
+        "<b style='color:#b8a88a;'>6.</b> Paste the key in the sidebar of this app"
+        "</div>"
+        "<div style='margin-top:0.8rem;'>"
+        "<a href='https://platform.openai.com/signup' target='_blank'"
+        " style='display:inline-block; background:#c9a96e; color:#0a0a0a;"
+        " font-size:0.82rem; font-weight:500; padding:0.4rem 1.2rem;"
+        " border-radius:6px; text-decoration:none;'>"
+        "Sign up at OpenAI &#8594;"
+        "</a></div></div>",
+        unsafe_allow_html=True
+    )
+
+    # Anthropic setup
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "Step 2 — Get Your Anthropic API Key (Claude)</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
+        " padding:1.4rem 1.8rem; margin-bottom:1rem;'>"
+        "<div style='font-size:0.84rem; color:#888; line-height:2;'>"
+        "<b style='color:#b8a88a;'>1.</b> Go to "
+        "<a href='https://console.anthropic.com' target='_blank'"
+        " style='color:#c9a96e;'>console.anthropic.com</a> "
+        "and create a free account<br/>"
+        "<b style='color:#b8a88a;'>2.</b> Click <b>API Keys</b> in the left sidebar<br/>"
+        "<b style='color:#b8a88a;'>3.</b> Click <b>Create Key</b> &#8594; give it a name<br/>"
+        "<b style='color:#b8a88a;'>4.</b> Copy the key — it starts with <b>sk-ant-</b><br/>"
+        "<b style='color:#b8a88a;'>5.</b> Go to <b>Billing</b> &#8594; add $5 credit<br/>"
+        "<b style='color:#b8a88a;'>6.</b> Paste the key in the sidebar of this app"
+        "</div>"
+        "<div style='margin-top:0.8rem;'>"
+        "<a href='https://console.anthropic.com' target='_blank'"
+        " style='display:inline-block; background:#c9a96e; color:#0a0a0a;"
+        " font-size:0.82rem; font-weight:500; padding:0.4rem 1.2rem;"
+        " border-radius:6px; text-decoration:none;'>"
+        "Sign up at Anthropic &#8594;"
+        "</a></div></div>",
+        unsafe_allow_html=True
+    )
+
+    # Where to enter keys
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "Step 3 — Enter Keys in the App</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a;"
+        " border-left:3px solid #c9a96e; border-radius:10px;"
+        " padding:1.1rem 1.4rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.85;'>"
+        "Once you have both keys:<br/>"
+        "&#x2022; Open the app and look at the <b style='color:#b8a88a;'>left sidebar</b><br/>"
+        "&#x2022; Scroll down to <b style='color:#b8a88a;'>API Keys</b> section<br/>"
+        "&#x2022; Paste your <b style='color:#b8a88a;'>OpenAI key</b> in the first box<br/>"
+        "&#x2022; Paste your <b style='color:#b8a88a;'>Anthropic key</b> in the second box<br/>"
+        "&#x2022; The app will use your keys automatically from that point"
+        "</div></div>",
+        unsafe_allow_html=True
+    )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SHARE TAB
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_share:
+
+    st.markdown(
+        "<div class='about-box'>"
+        "Share the Discourse Summarizer with students, mentees, and fellow seekers. "
+        "No installation required — works on any device instantly."
+        "</div>",
+        unsafe_allow_html=True
+    )
+
+    # Email template
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "&#x1F4E7; Ready-to-Send Email Template</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='background:#0d0d0d; border:1px solid #1e1e1e; border-radius:10px;"
+        " padding:1.2rem 1.5rem; font-size:0.82rem; color:#666;"
+        " line-height:1.9; font-style:italic; margin-bottom:1rem;'>"
         "Dear [Name],<br/><br/>"
         "I would like to share a tool I have built for transcribing and summarizing "
         "spiritual discourses using AI. You can use it to get structured summaries "
-        "of Vedanta lectures, Upanishad teachings, and other discourses.<br/><br/>"
-        "Access it here: [your Streamlit URL]<br/><br/>"
-        "On iPhone: open in Safari, tap Share, then Add to Home Screen.<br/>"
-        "On Android: open in Chrome, tap the menu, then Add to Home Screen.<br/><br/>"
+        "of Vedanta lectures, Chinmaya Mission talks, Upanishad classes, and more.<br/><br/>"
+        "<b style='color:#888;'>Access it here:</b> [paste your Streamlit URL]<br/><br/>"
+        "<b style='color:#888;'>On iPhone:</b> Open in Safari &#8594; tap Share "
+        "&#8594; Add to Home Screen<br/>"
+        "<b style='color:#888;'>On Android:</b> Open in Chrome &#8594; tap Menu "
+        "&#8594; Add to Home Screen<br/><br/>"
+        "The app is free for the first 5 uses. After that, you can set up your own "
+        "API keys (instructions are inside the app under Get the App &#8594; API Setup).<br/><br/>"
         "With pranams,<br/>"
         "Dr. Suma Rajashankar"
-        "</div></div></div>",
+        "</div>",
         unsafe_allow_html=True
     )
 
+    # What they get
     st.markdown(
-        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
-        " padding:1.4rem 1.8rem; margin-bottom:0.8rem;'>"
-        "<div style='font-family:Cormorant Garamond,serif; font-size:0.95rem;"
-        " color:#c9a96e; font-weight:600; margin-bottom:0.6rem;'>&#x1F4F1; Share via WhatsApp</div>"
-        "<div style='font-size:0.83rem; color:#888; line-height:1.8;'>"
-        "Simply send your Streamlit URL in WhatsApp. Recipients can:<br/>"
-        "&#x2022; Open it directly in their mobile browser<br/>"
-        "&#x2022; Add to Home Screen for a one-tap app experience<br/>"
-        "&#x2022; Use it immediately with no signup required"
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
+        "What Your Mentees Get</div>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:10px;"
+        " padding:1.1rem 1.4rem; margin-bottom:0.8rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.9;'>"
+        "&#x2705; <b style='color:#b8a88a;'>5 free uses</b> — no setup required<br/>"
+        "&#x2705; <b style='color:#b8a88a;'>No account</b> — open and use instantly<br/>"
+        "&#x2705; <b style='color:#b8a88a;'>All devices</b> — iPhone, Android, desktop<br/>"
+        "&#x2705; <b style='color:#b8a88a;'>Multiple summary styles</b> — bullets, table, PDF, Word<br/>"
+        "&#x2705; <b style='color:#b8a88a;'>English transliteration</b> of Sanskrit terms<br/>"
+        "&#x2705; <b style='color:#b8a88a;'>Download transcripts</b> for personal study"
         "</div></div>",
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
-        " padding:1.4rem 1.8rem; margin-bottom:0.8rem;'>"
-        "<div style='font-family:Cormorant Garamond,serif; font-size:0.95rem;"
-        " color:#c9a96e; font-weight:600; margin-bottom:0.6rem;'>&#x2139;&#xFE0F; What your mentees need to know</div>"
-        "<div style='font-size:0.83rem; color:#888; line-height:1.8;'>"
-        "&#x2022; <b style='color:#b8a88a;'>No account needed</b> — open and use instantly<br/>"
-        "&#x2022; <b style='color:#b8a88a;'>No download needed</b> — runs in the browser<br/>"
-        "&#x2022; <b style='color:#b8a88a;'>Works on all devices</b> — iPhone, Android, desktop<br/>"
-        "&#x2022; <b style='color:#b8a88a;'>Free to use</b> — no charges to users<br/>"
-        "&#x2022; <b style='color:#b8a88a;'>Supports MP3, M4A, WAV, OGG</b> audio formats<br/>"
-        "&#x2022; <b style='color:#b8a88a;'>Outputs in multiple formats</b> — bullets, table, PDF, Word"
-        "</div></div>",
-        unsafe_allow_html=True
-    )
-
+    # Contact
     st.markdown(
         "<div style='background:#111; border:1px solid #2a2a2a;"
         " border-left:3px solid #c9a96e; border-radius:8px;"
-        " padding:0.8rem 1.2rem; margin-top:0.5rem;'>"
-        "<div style='font-size:0.82rem; color:#888; line-height:1.8;'>"
-        "Questions or feedback? Reach out at "
-        "<a href='mailto:vedantavani.manana@gmail.com'"
-        " style='color:#c9a96e;'>vedantavani.manana@gmail.com</a>"
+        " padding:0.8rem 1.2rem;'>"
+        "<div style='font-size:0.82rem; color:#888;'>"
+        "Questions? Reach out at "
+        "<a href='mailto:vedantavani.manana@gmail.com' style='color:#c9a96e;'>"
+        "vedantavani.manana@gmail.com</a>"
         "</div></div>",
         unsafe_allow_html=True
     )
