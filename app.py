@@ -18,6 +18,20 @@ st.set_page_config(
 
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
+# ── Fix sidebar "app" label to show "Home" ──────────────────────────────────
+st.markdown("""
+<style>
+/* Target only the first nav item (app.py) and rename it */
+[data-testid="stSidebarNav"] ul li:first-child a p {
+    font-size: 0;
+}
+[data-testid="stSidebarNav"] ul li:first-child a p::before {
+    content: "Home";
+    font-size: 0.875rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Extra button styling for nav cards
 st.markdown("""
 <style>
