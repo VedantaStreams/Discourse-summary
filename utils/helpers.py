@@ -10,15 +10,40 @@ CHUNK_MB = 24  # OpenAI Whisper API limit is 25MB
 # ── Audio splitting ────────────────────────────────────────────────────────────
 
 def get_duration(path: str) -> float:
-    result = subprocess.run(
-        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
-         "-of", "default=noprint_wrappers=1:nokey=1", path],
-        capture_output=True, text=True
-    )
+    """Get audio duration using ffprobe if available, else estimate from file size."""
+    # Try ffprobe first
     try:
-        return float(result.stdout.strip())
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", path],
+            capture_output=True, text=True, timeout=30
+        )
+        duration = float(result.stdout.strip())
+        if duration > 0:
+            return duration
     except Exception:
-        return 0.0
+        pass
+
+    # Fallback: try ffmpeg -i to get duration from stderr
+    try:
+        result = subprocess.run(
+            ["ffmpeg", "-i", path],
+            capture_output=True, text=True, timeout=30
+        )
+        import re
+        match = re.search("[0-9]+:[0-9]+:[0-9]+[.][0-9]+", result.stderr)
+        if match:
+            time_str = match.group(0)
+            parts = time_str.split(':')
+            return int(parts[0]) * 3600 + int(parts[1]) * 60 + float(parts[2])
+    except Exception:
+        pass
+
+    # Last fallback: estimate duration from file size
+    # Assume 128kbps MP3 = 16KB/sec
+    file_size_bytes = os.path.getsize(path)
+    estimated_duration = file_size_bytes / (128 * 1024 / 8)
+    return estimated_duration
 
 
 def split_audio_ffmpeg(path: str) -> list:
@@ -29,12 +54,13 @@ def split_audio_ffmpeg(path: str) -> list:
 
     duration = get_duration(path)
     n_chunks = math.ceil(file_size_mb / CHUNK_MB)
-    chunk_duration = math.ceil(duration / n_chunks)
+    # Add 10% buffer to chunk duration to avoid missing content
+    chunk_duration = math.ceil((duration / n_chunks) * 1.1)
     tmp_dir = tempfile.mkdtemp()
     chunks = []
 
     for i in range(n_chunks):
-        start = i * chunk_duration
+        start = i * math.ceil(duration / n_chunks)
         chunk_path = os.path.join(tmp_dir, f"chunk_{i+1}.mp3")
         subprocess.run(
             ["ffmpeg", "-y", "-i", path,
@@ -397,30 +423,4 @@ def markdown_table_to_html(md: str) -> str:
     return html
 
 
-TABLE_CSS = """
-<style>
-table th {
-    padding: 10px 14px;
-    text-align: left;
-    color: #c9a96e;
-    font-weight: 500;
-    font-size: 0.82rem;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    border-right: 1px solid #2a2a2a;
-}
-table td {
-    padding: 9px 14px;
-    border-right: 1px solid #1e1e1e;
-    border-bottom: 1px solid #1e1e1e;
-    vertical-align: top;
-    line-height: 1.6;
-}
-table tr:hover td {
-    background: #222 !important;
-}
-table td:last-child, table th:last-child {
-    border-right: none;
-}
-</style>
-"""
+TAB
