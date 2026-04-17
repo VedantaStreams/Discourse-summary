@@ -2,6 +2,7 @@ import streamlit as st
 import sys
 import os
 import tempfile
+import requests
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.resolve()
@@ -38,113 +39,238 @@ if not openai_key:
 st.markdown("""
 <div class="hero">
     <h1>🎬 Video <span class="accent">Summarizer</span></h1>
-    <p class="subtitle">Use a YouTube URL or upload an MP4 · Audio extracted automatically · Transcribed & summarized</p>
+    <p class="subtitle">Extract audio from YouTube or upload MP4 · Transcribe · Summarize</p>
 </div>
 """, unsafe_allow_html=True)
 
-# ── Input tabs ─────────────────────────────────────────────────────────────────
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MAIN INPUT TABS — YouTube or MP4
+# ══════════════════════════════════════════════════════════════════════════════
 st.markdown('<div class="step-label">Step 1 — Choose Input</div>', unsafe_allow_html=True)
 tab_yt, tab_mp4 = st.tabs(["▶ YouTube Video", "📁 Upload MP4"])
 
-video_file = None
-yt_url = ""
+audio_file_for_processing = None
 
-# ── YouTube Tab ────────────────────────────────────────────────────────────────
+
+# ══════════════════════════════════════════════════════════════════════════════
+# YOUTUBE TAB
+# ══════════════════════════════════════════════════════════════════════════════
 with tab_yt:
+
     st.markdown("""
 <div class="about-box">
-    <b>ℹ️ How to use YouTube videos with this app</b><br/><br/>
-    Due to YouTube's server restrictions, direct URL downloading is blocked on cloud platforms.
-    Follow these simple steps to get your YouTube audio into the app:
+    Choose how you want to extract audio from YouTube below.
+    <b>Option A</b> uses the Cobalt API (automatic, no extra app needed).
+    <b>Option B</b> guides you through a manual download if Option A does not work.
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown("""
-<div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
-            padding:1.4rem 1.8rem; margin-bottom:1rem;">
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
-        ⭐ Method 1 — 4K Video Downloader (Recommended)
-    </div>
-    <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Download <b>4K Video Downloader</b> free from 4kdownload.com<br/>
-        <b style="color:#b8a88a;">Step 2</b> — Open app and click <b>Paste Link</b><br/>
-        <b style="color:#b8a88a;">Step 3</b> — Select <b>Extract Audio</b> → Format: <b>MP3</b> → Download<br/>
-        <b style="color:#b8a88a;">Step 4</b> — Upload the MP3 in the Audio Summarizer page
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    # ── Sub-tabs for YouTube method ────────────────────────────────────────────
+    yt_tab_a, yt_tab_b = st.tabs([
+        "⚡ Option A — Auto via Cobalt API",
+        "🛠️ Option B — Manual Download Guide"
+    ])
 
-    st.markdown("""
-<div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
-            padding:1.4rem 1.8rem; margin-bottom:1rem;">
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
-        🌐 Method 2 — Online Audio Extractor
-    </div>
-    <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Go to yt1s.com or ytmp3.cc in your browser<br/>
-        <b style="color:#b8a88a;">Step 2</b> — Paste your YouTube URL and download as <b>MP3</b><br/>
-        <b style="color:#b8a88a;">Step 3</b> — Upload the MP3 in the Audio Summarizer page
+    # ── OPTION A — Cobalt API ──────────────────────────────────────────────────
+    with yt_tab_a:
+        st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;
+            border-radius:10px; padding:1rem 1.4rem; margin-bottom:1rem;">
+    <div style="font-size:0.82rem; color:#888; line-height:1.8;">
+        🔹 <b style="color:#b8a88a;">No API key needed</b> — Cobalt is free and open source<br/>
+        🔹 Works with <b style="color:#b8a88a;">public YouTube videos</b><br/>
+        🔹 Does <b style="color:#b8a88a;">not work</b> with private, age-restricted, or live videos
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown("""
-<div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
-            padding:1.4rem 1.8rem; margin-bottom:1rem;">
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                color:#c9a96e; margin-bottom:0.8rem; font-weight:600;">
-        🎬 Method 3 — Download MP4 and Upload Below
-    </div>
-    <div style="font-size:0.85rem; color:#888; line-height:1.9;">
-        <b style="color:#b8a88a;">Step 1</b> — Download the video as <b>MP4</b> using 4K Video Downloader<br/>
-        <b style="color:#b8a88a;">Step 2</b> — Switch to the <b>Upload MP4</b> tab above<br/>
-        <b style="color:#b8a88a;">Step 3</b> — Upload the MP4 — audio extracted and summarized automatically
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-    # Shortcut button to Audio Summarizer
-    st.markdown(" ")
-    if st.button("🎙️ Go to Audio Summarizer → Upload MP3 there", key="goto_audio"):
-        st.switch_page("pages/2_Audio_Summarizer.py")
-
-    # Paste URL helper — clean and show
-    st.markdown("---")
-    st.markdown(
-        "<small style='color:#555'>💡 Paste your YouTube URL below to get the clean single-video link "
-        "you can use with any of the methods above:</small>",
-        unsafe_allow_html=True
-    )
-    raw_url = st.text_input(
-        "Paste YouTube URL to clean it",
-        placeholder="https://www.youtube.com/watch?v=...&list=...",
-        help="Strips playlist and extra parameters — gives you a clean single video URL"
-    )
-    if raw_url and raw_url.strip():
-        cleaned = clean_youtube_url(raw_url.strip())
-        st.success(f"✅ Clean video URL: `{cleaned}`")
-        st.markdown(
-            "<small style='color:#555'>Copy this clean URL and use it with any method above.</small>",
-            unsafe_allow_html=True
+        yt_url_a = st.text_input(
+            "Paste YouTube URL",
+            placeholder="https://www.youtube.com/watch?v=...",
+            key="yt_url_a",
+            help="Playlist links are cleaned automatically — just paste as-is."
         )
 
+        if yt_url_a and yt_url_a.strip():
+            cleaned_url = clean_youtube_url(yt_url_a.strip())
+            if cleaned_url != yt_url_a.strip():
+                st.info(f"ℹ️ Playlist removed — using: `{cleaned_url}`")
 
-# ── MP4 Upload Tab ─────────────────────────────────────────────────────────────
+            if st.button("🎵 Fetch Audio Automatically", key="fetch_cobalt"):
+                with st.spinner("Connecting to Cobalt API and fetching audio…"):
+                    try:
+                        headers = {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        }
+                        payload = {
+                            "url": cleaned_url,
+                            "downloadMode": "audio",
+                            "audioFormat": "mp3",
+                            "audioBitrate": "128"
+                        }
+                        resp = requests.post(
+                            "https://api.cobalt.tools/",
+                            json=payload,
+                            headers=headers,
+                            timeout=30
+                        )
+
+                        if resp.status_code != 200:
+                            st.error(f"❌ Cobalt API error {resp.status_code}. Try Option B instead.")
+                            st.stop()
+
+                        data = resp.json()
+                        status = data.get("status", "")
+
+                        if status in ("tunnel", "redirect"):
+                            audio_url = data.get("url", "")
+                            if not audio_url:
+                                st.error("❌ No audio URL returned. Try Option B.")
+                                st.stop()
+
+                            st.info("⬇️ Downloading audio…")
+                            audio_resp = requests.get(audio_url, timeout=120, stream=True)
+                            if audio_resp.status_code == 200:
+                                tmp_dir = tempfile.mkdtemp()
+                                audio_path = os.path.join(tmp_dir, "yt_audio.mp3")
+                                with open(audio_path, "wb") as f:
+                                    for chunk in audio_resp.iter_content(chunk_size=8192):
+                                        f.write(chunk)
+                                size_mb = os.path.getsize(audio_path) / (1024 * 1024)
+                                st.success(f"✅ Audio fetched! ({size_mb:.1f} MB) — scroll down to transcribe.")
+                                st.session_state["yt_audio_path"] = audio_path
+                            else:
+                                st.error(f"❌ Download failed: HTTP {audio_resp.status_code}. Try Option B.")
+
+                        elif status == "error":
+                            err = data.get("error", {}).get("code", "unknown")
+                            st.error(f"❌ Cobalt error: {err}. Switch to Option B.")
+
+                        else:
+                            st.error(f"❌ Unexpected response. Switch to Option B.")
+
+                    except requests.exceptions.Timeout:
+                        st.error("❌ Request timed out. Try again or switch to Option B.")
+                    except requests.exceptions.ConnectionError:
+                        st.error("❌ Could not connect to Cobalt API. Check internet or try Option B.")
+                    except Exception as e:
+                        st.error(f"❌ Error: {str(e)}. Try Option B.")
+
+        if st.session_state.get("yt_audio_path") and \
+           os.path.exists(st.session_state.get("yt_audio_path", "")):
+            size_mb = os.path.getsize(st.session_state["yt_audio_path"]) / (1024 * 1024)
+            st.markdown(f"""
+<div style="background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;
+            border-radius:8px; padding:0.8rem 1.2rem; margin-top:0.5rem;">
+    <span style="color:#c9a96e; font-size:0.85rem;">✅ Audio ready</span>
+    <span style="color:#555; font-size:0.8rem; margin-left:1rem;">{size_mb:.1f} MB · scroll down to transcribe</span>
+</div>
+""", unsafe_allow_html=True)
+            audio_file_for_processing = st.session_state["yt_audio_path"]
+
+
+    # ── OPTION B — Manual Guide ────────────────────────────────────────────────
+    with yt_tab_b:
+
+        st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;
+            border-radius:10px; padding:1rem 1.4rem; margin-bottom:1.2rem;">
+    <div style="font-size:0.82rem; color:#888; line-height:1.8;">
+        Use this option if Option A fails — private videos, age-restricted content,
+        or region-blocked videos. All methods below work on your Mac.
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+        # URL cleaner
+        raw_url_b = st.text_input(
+            "Paste your YouTube URL to get a clean link",
+            placeholder="https://www.youtube.com/watch?v=...&list=...",
+            key="yt_url_b",
+            help="Strips playlist parameters so you can use it in the tools below."
+        )
+        if raw_url_b and raw_url_b.strip():
+            cleaned_b = clean_youtube_url(raw_url_b.strip())
+            st.success(f"✅ Clean URL: `{cleaned_b}`")
+            st.caption("Copy this URL and use it with any method below.")
+
+        st.markdown(" ")
+
+        # Method 1
+        st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-radius:10px;
+            padding:1.2rem 1.5rem; margin-bottom:0.8rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1rem;
+                color:#c9a96e; margin-bottom:0.6rem; font-weight:600;">
+        ⭐ Method 1 — 4K Video Downloader (Best quality)
+    </div>
+    <div style="font-size:0.83rem; color:#888; line-height:1.85;">
+        <b style="color:#b8a88a;">1.</b> Download free from
+        <a href="https://www.4kdownload.com" target="_blank" style="color:#c9a96e;">4kdownload.com</a><br/>
+        <b style="color:#b8a88a;">2.</b> Paste URL → click <b>Paste Link</b><br/>
+        <b style="color:#b8a88a;">3.</b> Choose <b>Extract Audio</b> → Format: <b>MP3</b> → Download<br/>
+        <b style="color:#b8a88a;">4.</b> Upload the MP3 in the <b>Audio Summarizer</b> page
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+        # Method 2
+        st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-radius:10px;
+            padding:1.2rem 1.5rem; margin-bottom:0.8rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1rem;
+                color:#c9a96e; margin-bottom:0.6rem; font-weight:600;">
+        🌐 Method 2 — Cobalt Browser (No install needed)
+    </div>
+    <div style="font-size:0.83rem; color:#888; line-height:1.85;">
+        <b style="color:#b8a88a;">1.</b> Open
+        <a href="https://cobalt.tools" target="_blank" style="color:#c9a96e;">cobalt.tools</a>
+        in your browser<br/>
+        <b style="color:#b8a88a;">2.</b> Paste your YouTube URL → select <b>Audio only</b> → Download<br/>
+        <b style="color:#b8a88a;">3.</b> Upload the MP3 in the <b>Audio Summarizer</b> page
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+        # Method 3
+        st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-radius:10px;
+            padding:1.2rem 1.5rem; margin-bottom:0.8rem;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1rem;
+                color:#c9a96e; margin-bottom:0.6rem; font-weight:600;">
+        🎬 Method 3 — Download MP4 and Upload Below
+    </div>
+    <div style="font-size:0.83rem; color:#888; line-height:1.85;">
+        <b style="color:#b8a88a;">1.</b> Download the video as <b>MP4</b> using any tool<br/>
+        <b style="color:#b8a88a;">2.</b> Switch to the <b>📁 Upload MP4</b> main tab above<br/>
+        <b style="color:#b8a88a;">3.</b> Upload MP4 — audio extracted and summarized automatically
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+        st.markdown(" ")
+        if st.button("🎙️ Go to Audio Summarizer", key="goto_audio"):
+            st.switch_page("pages/2_Audio_Summarizer.py")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# MP4 UPLOAD TAB
+# ══════════════════════════════════════════════════════════════════════════════
 with tab_mp4:
     st.markdown("""
 <div class="about-box">
-    Upload an <b>MP4, MOV, MKV or WEBM</b> video file. The audio is extracted automatically
-    using ffmpeg, then transcribed and summarized. Works with any video downloaded from
-    YouTube, Vimeo, or recorded locally.
+    Upload an <b>MP4, MOV, MKV or WEBM</b> video file. Audio is extracted automatically
+    using ffmpeg, then transcribed and summarized. Works with any video downloaded
+    from YouTube, Vimeo, or recorded locally.
 </div>
 """, unsafe_allow_html=True)
 
     video_file = st.file_uploader(
         "Upload video file",
         type=["mp4", "mov", "mkv", "webm"],
-        help="Audio will be extracted automatically using ffmpeg."
+        help="Audio will be extracted automatically."
     )
     if video_file:
         file_size_mb = video_file.size / (1024 * 1024)
@@ -152,10 +278,30 @@ with tab_mp4:
             f'<span class="file-pill">🎬 {video_file.name} · {file_size_mb:.1f} MB</span>',
             unsafe_allow_html=True
         )
+        if st.button("🎵 Extract Audio from Video", key="extract_mp4"):
+            with st.spinner("Extracting audio from video…"):
+                try:
+                    tmp_dir = tempfile.mkdtemp()
+                    suffix = Path(video_file.name).suffix
+                    tmp_video = os.path.join(tmp_dir, f"video{suffix}")
+                    with open(tmp_video, "wb") as f:
+                        f.write(video_file.read())
+                    extracted = extract_audio_from_video(tmp_video)
+                    st.session_state["mp4_audio_path"] = extracted
+                    size_mb = os.path.getsize(extracted) / (1024 * 1024)
+                    st.success(f"✅ Audio extracted! ({size_mb:.1f} MB) — scroll down to transcribe.")
+                except Exception as e:
+                    st.error(f"❌ Error extracting audio: {str(e)}")
+
+    if st.session_state.get("mp4_audio_path") and \
+       os.path.exists(st.session_state.get("mp4_audio_path", "")):
+        audio_file_for_processing = st.session_state["mp4_audio_path"]
 
 
-# ── Options + Process (only for MP4 upload) ───────────────────────────────────
-if video_file:
+# ══════════════════════════════════════════════════════════════════════════════
+# SHARED: OPTIONS + TRANSCRIPTION + RESULTS
+# ══════════════════════════════════════════════════════════════════════════════
+if audio_file_for_processing:
     st.markdown("---")
     st.markdown('<div class="step-label">Step 2 — Output Options</div>', unsafe_allow_html=True)
 
@@ -186,28 +332,18 @@ if video_file:
         st.warning("⚠️ Please enter both API keys in the sidebar of the main page.")
         st.stop()
 
-    st.markdown('<div class="step-label">Step 3 — Process</div>', unsafe_allow_html=True)
+    st.markdown('<div class="step-label">Step 3 — Transcribe & Summarize</div>', unsafe_allow_html=True)
 
-    if st.button("🚀 Extract Audio · Transcribe · Summarize"):
+    if st.button("🚀 Transcribe & Summarize", key="process_video"):
         try:
             progress_bar = st.progress(0)
             status_text = st.empty()
 
-            status_text.markdown("**Extracting audio from video file…**")
+            status_text.markdown("**Preparing audio chunks…**")
             progress_bar.progress(0.05)
 
-            tmp_dir = tempfile.mkdtemp()
-            suffix = Path(video_file.name).suffix
-            tmp_video = os.path.join(tmp_dir, f"video{suffix}")
-            with open(tmp_video, "wb") as f:
-                f.write(video_file.read())
-            audio_path = extract_audio_from_video(tmp_video)
-
-            progress_bar.progress(0.20)
-            status_text.markdown("**Audio extracted. Splitting into chunks if needed…**")
-
-            chunks = split_audio_ffmpeg(audio_path)
-            progress_bar.progress(0.25)
+            chunks = split_audio_ffmpeg(audio_file_for_processing)
+            progress_bar.progress(0.15)
 
             transcript = transcribe_chunks(chunks, openai_key, progress_bar, status_text)
             progress_bar.progress(0.80)
@@ -216,6 +352,10 @@ if video_file:
             summary = summarize_text(transcript, summary_style, selected_columns, anthropic_key)
             progress_bar.progress(1.0)
             status_text.markdown("✅ **Done!**")
+
+            # Clear audio from session
+            st.session_state.pop("yt_audio_path", None)
+            st.session_state.pop("mp4_audio_path", None)
 
             st.markdown("---")
             st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
@@ -258,10 +398,6 @@ if video_file:
                 st.markdown("#### 📄 Full Transcript")
                 st.markdown(f'<div class="output-box">{transcript}</div>', unsafe_allow_html=True)
 
-            # Cleanup
-            if audio_path and os.path.exists(audio_path):
-                try: os.unlink(audio_path)
-                except: pass
-
         except Exception as e:
             st.error(f"❌ Error: {str(e)}")
+
