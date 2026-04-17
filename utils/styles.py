@@ -91,5 +91,15 @@ hr { border-color: #1e1e1e !important; margin: 1.5rem 0 !important; }
 .bio-role-small { font-size: 0.72rem; color: #c9a96e; letter-spacing: 0.4px; text-transform: uppercase; margin-bottom: 0.6rem; }
 .bio-link a { font-size: 0.8rem; color: #c9a96e; text-decoration: none; border-bottom: 1px dashed #c9a96e; }
 .bio-divider { border: none; border-top: 1px solid #1e1e1e; margin: 0.8rem 0; }
+
+/* Rename sidebar "app" label to "Home" on ALL pages */
+[data-testid="stSidebarNav"] ul li:first-child a p {
+    font-size: 0 !important;
+}
+[data-testid="stSidebarNav"] ul li:first-child a p::before {
+    content: "Home";
+    font-size: 0.875rem !important;
+    color: #e8e0d4;
+}
 </style>
 """
