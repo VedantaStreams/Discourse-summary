@@ -18,6 +18,21 @@ st.set_page_config(
 
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+[data-testid="stSidebarNavLink"]:first-child span {
+    visibility: hidden;
+    position: relative;
+}
+[data-testid="stSidebarNavLink"]:first-child span::after {
+    content: "Home";
+    visibility: visible;
+    position: absolute;
+    left: 0;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Extra button styling for nav cards
 st.markdown("""
 <style>
