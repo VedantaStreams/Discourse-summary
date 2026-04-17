@@ -2,8 +2,6 @@ import streamlit as st
 import sys
 import os
 import tempfile
-import subprocess
-import math
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent.resolve()
@@ -25,7 +23,7 @@ from utils.helpers import (
 )
 
 st.set_page_config(
-    page_title="Video Summarizer · Suma AI Hub (Local)",
+    page_title="Video Summarizer · Suma AI Hub",
     page_icon="🎬",
     layout="centered"
 )
@@ -46,54 +44,9 @@ if not openai_key:
 st.markdown("""
 <div class="hero">
     <h1>🎬 Video <span class="accent">Summarizer</span></h1>
-    <p class="subtitle">Paste a YouTube URL or upload MP4 · Audio extracted automatically · Transcribe · Summarize</p>
+    <p class="subtitle">YouTube or MP4 · Audio extracted · Transcribed · Summarized</p>
 </div>
 """, unsafe_allow_html=True)
-
-
-# ── yt-dlp download function ───────────────────────────────────────────────────
-def download_youtube_audio_local(url: str, status_text, progress_bar) -> str:
-    """Download YouTube audio using yt-dlp — works locally on Mac."""
-    url = clean_youtube_url(url)
-    tmp_dir = tempfile.mkdtemp()
-    output_template = os.path.join(tmp_dir, "yt_audio.%(ext)s")
-
-    status_text.markdown("**Downloading audio from YouTube…** (this may take 1–2 minutes)")
-    progress_bar.progress(0.10)
-
-    result = subprocess.run(
-        [
-            "yt-dlp",
-            "-x",
-            "--audio-format", "mp3",
-            "--audio-quality", "5",
-            "--no-playlist",
-            "--no-warnings",
-            "-o", output_template,
-            url
-        ],
-        capture_output=True,
-        text=True,
-        timeout=300
-    )
-
-    if result.returncode != 0:
-        error = result.stderr[:400] if result.stderr else "Unknown error"
-        raise RuntimeError(
-            f"yt-dlp failed.\n\n"
-            f"Details: {error}\n\n"
-            f"Make sure yt-dlp is installed: run `pip install yt-dlp` in your terminal."
-        )
-
-    # Find the downloaded file
-    for f in os.listdir(tmp_dir):
-        if f.startswith("yt_audio"):
-            return os.path.join(tmp_dir, f)
-
-    raise FileNotFoundError(
-        "Audio file not found after download. "
-        "The video may be private, age-restricted, or region-blocked."
-    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -104,51 +57,130 @@ tab_yt, tab_mp4 = st.tabs(["▶ YouTube Video", "📁 Upload MP4"])
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# YOUTUBE TAB — FULLY AUTOMATIC via yt-dlp
+# YOUTUBE TAB
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_yt:
+
+    # ── How it works box ──────────────────────────────────────────────────────
     st.markdown("""
 <div class="about-box">
-    Paste a YouTube URL — audio is downloaded and extracted <b>automatically</b>
-    using yt-dlp running on your Mac. Works with public videos, playlists are
-    cleaned automatically. Paste the full URL as-is.
+    To summarize a YouTube discourse, extract the audio using
+    <b>4K Video Downloader</b> (free) and upload the MP3 directly below.
+    The full transcript and summary will appear on this page — no need to
+    switch to the Audio Summarizer.
 </div>
 """, unsafe_allow_html=True)
 
-    yt_url = st.text_input(
-        "Paste YouTube URL",
-        placeholder="https://www.youtube.com/watch?v=...",
-        key="yt_url_local",
-        help="Playlist links are cleaned automatically — just paste as-is."
+    # ── 4K Downloader instructions card ───────────────────────────────────────
+    st.markdown("""
+<div style="background:#111; border:1px solid #2a2a2a; border-radius:12px;
+            padding:1.4rem 1.8rem; margin-bottom:1.2rem;">
+
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+                color:#c9a96e; font-weight:600; margin-bottom:0.8rem;">
+        🖥️ Step 1 — Download audio using 4K Video Downloader
+    </div>
+
+    <div style="font-size:0.84rem; color:#888; line-height:1.9;">
+        <b style="color:#b8a88a;">1.</b> Download the free app from
+        <a href="https://www.4kdownload.com/products/videodownloader"
+           target="_blank"
+           style="color:#c9a96e; text-decoration:none; border-bottom:1px dashed #c9a96e;">
+            4kdownload.com/products/videodownloader
+        </a><br/>
+        <b style="color:#b8a88a;">2.</b> Open the app → click <b>Paste Link</b><br/>
+        <b style="color:#b8a88a;">3.</b> In the popup → select <b>Extract Audio</b>
+        → Format: <b>MP3</b> → click <b>Download</b><br/>
+        <b style="color:#b8a88a;">4.</b> Upload the downloaded MP3 below ↓
+    </div>
+
+    <div style="margin-top:0.8rem;">
+        <a href="https://www.4kdownload.com/products/videodownloader"
+           target="_blank"
+           style="display:inline-block; background:#c9a96e; color:#0a0a0a;
+                  font-size:0.82rem; font-weight:500; padding:0.4rem 1.2rem;
+                  border-radius:6px; text-decoration:none;">
+            ⬇️ Download 4K Video Downloader (Free)
+        </a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+    # ── URL cleaner ───────────────────────────────────────────────────────────
+    st.markdown("""
+<div style="font-size:0.82rem; color:#666; margin-bottom:0.4rem;">
+    💡 Paste your YouTube URL below to get a clean link to use in 4K Downloader:
+</div>
+""", unsafe_allow_html=True)
+
+    raw_url = st.text_input(
+        "Paste YouTube URL (optional — to get clean link)",
+        placeholder="https://www.youtube.com/watch?v=...&list=...",
+        key="yt_url_cleaner",
+        label_visibility="collapsed"
+    )
+    if raw_url and raw_url.strip():
+        cleaned = clean_youtube_url(raw_url.strip())
+        st.success(f"✅ Clean URL — copy and paste into 4K Downloader: `{cleaned}`")
+
+    st.markdown(" ")
+
+    # ── Nested Audio Upload ────────────────────────────────────────────────────
+    st.markdown("""
+<div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+            color:#c9a96e; font-weight:600; margin-bottom:0.5rem;">
+    🎵 Step 2 — Upload the downloaded MP3 here
+</div>
+""", unsafe_allow_html=True)
+
+    uploaded_mp3 = st.file_uploader(
+        "Upload MP3 from 4K Video Downloader",
+        type=["mp3", "m4a", "wav", "ogg"],
+        accept_multiple_files=True,
+        key="yt_mp3_upload",
+        help="Upload 1 or more MP3 segments in order — they are transcribed sequentially."
     )
 
-    if yt_url and yt_url.strip():
-        cleaned = clean_youtube_url(yt_url.strip())
-        if cleaned != yt_url.strip():
-            st.info(f"ℹ️ Playlist removed — using: `{cleaned}`")
+    if uploaded_mp3:
+        total_mb = sum(f.size for f in uploaded_mp3) / (1024 * 1024)
+        pills = "".join(
+            f'<span class="file-pill">🎵 {f.name} · {f.size/(1024*1024):.1f} MB</span>'
+            for f in uploaded_mp3
+        )
+        st.markdown(
+            f"{pills}<br/><small style='color:#444'>"
+            f"{len(uploaded_mp3)} file(s) · {total_mb:.1f} MB total</small>",
+            unsafe_allow_html=True
+        )
 
-        if st.button("🎵 Download & Extract Audio", key="btn_yt_local"):
-            try:
-                progress_bar = st.progress(0)
-                status_text = st.empty()
+        # Save all uploaded files to temp and merge
+        tmp_dir = tempfile.mkdtemp()
+        saved_paths = []
+        for i, f in enumerate(uploaded_mp3):
+            suffix = Path(f.name).suffix
+            tmp_path = os.path.join(tmp_dir, f"yt_audio_{i+1}{suffix}")
+            with open(tmp_path, "wb") as out:
+                out.write(f.read())
+            saved_paths.append(tmp_path)
 
-                audio_path = download_youtube_audio_local(
-                    cleaned, status_text, progress_bar
-                )
-                size_mb = os.path.getsize(audio_path) / (1024 * 1024)
-                progress_bar.progress(0.25)
-                status_text.markdown(f"**Audio downloaded!** ({size_mb:.1f} MB) — ready to transcribe.")
-                st.session_state["video_audio_path"] = audio_path
-                st.success(f"✅ Audio ready ({size_mb:.1f} MB) — scroll down to transcribe.")
+        # If multiple files, concatenate using ffmpeg
+        if len(saved_paths) == 1:
+            st.session_state["video_audio_path"] = saved_paths[0]
+        else:
+            concat_list = os.path.join(tmp_dir, "concat.txt")
+            with open(concat_list, "w") as cl:
+                for p in saved_paths:
+                    cl.write(f"file '{p}'\n")
+            merged_path = os.path.join(tmp_dir, "merged_audio.mp3")
+            import subprocess
+            subprocess.run(
+                ["ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                 "-i", concat_list, "-acodec", "copy", merged_path],
+                capture_output=True
+            )
+            st.session_state["video_audio_path"] = merged_path
 
-            except subprocess.TimeoutExpired:
-                st.error("❌ Download timed out. The video may be too long.")
-            except FileNotFoundError as e:
-                st.error(f"❌ {str(e)}")
-            except RuntimeError as e:
-                st.error(f"❌ {str(e)}")
-            except Exception as e:
-                st.error(f"❌ Unexpected error: {str(e)}")
+        st.success("✅ Audio ready — scroll down to transcribe.")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -158,15 +190,15 @@ with tab_mp4:
     st.markdown("""
 <div class="about-box">
     Upload an <b>MP4, MOV, MKV or WEBM</b> video file. Audio is extracted
-    automatically using ffmpeg, then transcribed and summarized.
+    automatically using ffmpeg, then transcribed and summarized on this page.
 </div>
 """, unsafe_allow_html=True)
 
     video_file = st.file_uploader(
         "Upload video file",
         type=["mp4", "mov", "mkv", "webm"],
-        key="mp4_local",
-        help="Audio extracted automatically."
+        key="mp4_upload",
+        help="Audio extracted automatically using ffmpeg."
     )
 
     if video_file:
@@ -175,7 +207,7 @@ with tab_mp4:
             f'<span class="file-pill">🎬 {video_file.name} · {file_size_mb:.1f} MB</span>',
             unsafe_allow_html=True
         )
-        if st.button("🎵 Extract Audio from Video", key="extract_mp4_local"):
+        if st.button("🎵 Extract Audio from Video", key="extract_mp4"):
             with st.spinner("Extracting audio…"):
                 try:
                     tmp_dir = tempfile.mkdtemp()
@@ -186,25 +218,28 @@ with tab_mp4:
                     extracted = extract_audio_from_video(tmp_video)
                     size_mb = os.path.getsize(extracted) / (1024 * 1024)
                     st.session_state["video_audio_path"] = extracted
-                    st.success(f"✅ Audio extracted! ({size_mb:.1f} MB) — scroll down to transcribe.")
+                    st.success(
+                        f"✅ Audio extracted! ({size_mb:.1f} MB) — scroll down to transcribe."
+                    )
                 except Exception as e:
                     st.error(f"❌ Error: {str(e)}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SHARED PIPELINE
+# SHARED PIPELINE — appears once audio is ready from any source
 # ══════════════════════════════════════════════════════════════════════════════
 audio_ready_path = st.session_state.get("video_audio_path", "")
 if audio_ready_path and os.path.exists(audio_ready_path):
 
     st.markdown("---")
+
     size_mb = os.path.getsize(audio_ready_path) / (1024 * 1024)
     st.markdown(f"""
 <div style="background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;
             border-radius:8px; padding:0.7rem 1.2rem; margin-bottom:1rem;">
     <span style="color:#c9a96e; font-size:0.85rem;">🎵 Audio ready</span>
     <span style="color:#555; font-size:0.8rem; margin-left:1rem;">{size_mb:.1f} MB</span>
-    <span style="color:#444; font-size:0.8rem;"> → configure options below</span>
+    <span style="color:#444; font-size:0.8rem;"> · configure options below</span>
 </div>
 """, unsafe_allow_html=True)
 
@@ -216,12 +251,12 @@ if audio_ready_path and os.path.exists(audio_ready_path):
             "Summary style",
             ["Bullet highlights", "Main takeaways", "Detailed paragraphs",
              "Executive brief", "Academic digest", "Structured table"],
-            key="vid_style_local"
+            key="vid_style"
         )
     with col2:
         output_format = st.selectbox(
             "Download format", ["TXT", "PDF", "DOCX"],
-            key="vid_format_local"
+            key="vid_format"
         )
 
     selected_columns = []
@@ -230,14 +265,13 @@ if audio_ready_path and os.path.exists(audio_ready_path):
         cols = list(TABLE_COLUMNS.keys())
         selected_columns = st.multiselect(
             "Choose columns to include", cols, default=cols,
-            key="vid_cols_local"
+            key="vid_cols"
         )
         if not selected_columns:
             st.warning("Please select at least one column.")
 
     show_transcript = st.checkbox(
-        "Show full transcript on page", value=False,
-        key="vid_show_tr_local"
+        "Show full transcript on page", value=False, key="vid_show_tr"
     )
     st.markdown("---")
 
@@ -245,20 +279,25 @@ if audio_ready_path and os.path.exists(audio_ready_path):
         st.warning("⚠️ Please enter both API keys in the sidebar.")
         st.stop()
 
-    st.markdown('<div class="step-label">Step 3 — Transcribe & Summarize</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="step-label">Step 3 — Transcribe & Summarize</div>',
+        unsafe_allow_html=True
+    )
 
-    if st.button("🚀 Transcribe & Summarize", key="vid_process_local"):
+    if st.button("🚀 Transcribe & Summarize", key="vid_process"):
         try:
             progress_bar = st.progress(0)
             status_text = st.empty()
 
-            status_text.markdown("**Splitting audio into chunks if needed…**")
+            status_text.markdown("**Preparing audio…**")
             progress_bar.progress(0.05)
 
             chunks = split_audio_ffmpeg(audio_ready_path)
             progress_bar.progress(0.15)
 
-            transcript = transcribe_chunks(chunks, openai_key, progress_bar, status_text)
+            transcript = transcribe_chunks(
+                chunks, openai_key, progress_bar, status_text
+            )
             progress_bar.progress(0.80)
 
             status_text.markdown("**Transcription done! Summarizing with Claude…**")
@@ -271,9 +310,11 @@ if audio_ready_path and os.path.exists(audio_ready_path):
             st.session_state.pop("video_audio_path", None)
 
             st.markdown("---")
-            st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="step-label">Results</div>', unsafe_allow_html=True
+            )
 
-            # Transcript
+            # ── Transcript ─────────────────────────────────────────────────────
             st.markdown("#### 📄 Full Transcript")
             st.markdown(
                 f'<div class="output-box">{transcript}</div>',
@@ -284,12 +325,12 @@ if audio_ready_path and os.path.exists(audio_ready_path):
                 data=transcript,
                 file_name="transcript.txt",
                 mime="text/plain",
-                key="dl_tr_local"
+                key="dl_transcript"
             )
 
             st.markdown("---")
 
-            # Summary
+            # ── Summary ────────────────────────────────────────────────────────
             st.markdown("#### 📝 Summary")
             if summary_style == "Structured table":
                 st.markdown(TABLE_CSS, unsafe_allow_html=True)
@@ -308,7 +349,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
                 st.download_button(
                     "⬇️ Summary (.txt)", data=summary,
                     file_name="summary.txt", mime="text/plain",
-                    key="dl_sum_txt_local"
+                    key="dl_sum_txt"
                 )
             if output_format == "PDF":
                 pdf_bytes = make_pdf(title, summary)
@@ -316,7 +357,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
                     st.download_button(
                         "⬇️ Summary (.pdf)", data=pdf_bytes,
                         file_name="summary.pdf", mime="application/pdf",
-                        key="dl_sum_pdf_local"
+                        key="dl_sum_pdf"
                     )
             if output_format == "DOCX":
                 docx_bytes = make_docx(title, summary)
@@ -325,7 +366,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
                         "⬇️ Summary (.docx)", data=docx_bytes,
                         file_name="summary.docx",
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        key="dl_sum_docx_local"
+                        key="dl_sum_docx"
                     )
 
             if show_transcript:
