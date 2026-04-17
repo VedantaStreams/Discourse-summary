@@ -34,7 +34,7 @@ st.markdown(
     "&#x1F4CB; Usage Policy</div>"
     "<div style='font-size:0.84rem; color:#aaa; line-height:1.85;'>"
     "This app is offered as a <b style='color:#b8a88a;'>free resource</b> for students, "
-    "mentees, and fellow Vedanta seekers. Each user may use the app up to "
+    "and fellow Vedantins. Anyone may use the app up to "
     "<b style='color:#c9a96e;'>5 times</b> using the shared access provided.<br/><br/>"
     "After 5 uses, you are kindly requested to <b style='color:#b8a88a;'>set up your own "
     "API keys</b> — both are free to start and cost only a few cents per session. "
@@ -303,7 +303,7 @@ with tab_share:
 
     st.markdown(
         "<div class='about-box'>"
-        "Share the Discourse Summarizer with students, mentees, and fellow seekers. "
+        "Share the Discourse Summarizer with fellow Vedantins, seekers, and anyone interested. "
         "No installation required — works on any device instantly."
         "</div>",
         unsafe_allow_html=True
@@ -341,7 +341,7 @@ with tab_share:
     st.markdown(
         "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
         " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.6rem;'>"
-        "What Your Mentees Get</div>",
+        "What Anyone Gets</div>",
         unsafe_allow_html=True
     )
     st.markdown(
