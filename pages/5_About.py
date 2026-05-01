@@ -125,3 +125,4 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ── Quote with styled Swamiji name ────────────────────────────────────────────
+
