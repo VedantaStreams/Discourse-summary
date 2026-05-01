@@ -138,10 +138,10 @@ st.markdown(f"""
                 font-size:1.05rem; color:#c9a96e; letter-spacing:1px; margin:0.3rem 0 0.1rem;">
         &#x15A;rava&#x1E47;a &middot; Manana &middot; Nididhy&#x101;sana
     </div>
-    <div style="font-size:0.82rem; color:#555; letter-spacing:0.8px; margin-bottom:0.2rem;">
+    <div style="font-size:0.82rem; color:#aaa; letter-spacing:0.8px; margin-bottom:0.2rem;">
         &#x936;&#x94D;&#x930;&#x935;&#x923; &middot; &#x92E;&#x928;&#x928; &middot; &#x928;&#x93F;&#x926;&#x93F;&#x927;&#x94D;&#x92F;&#x93E;&#x938;&#x928;
     </div>
-    <div style="font-size:0.75rem; color:#3a3a3a; font-style:italic; letter-spacing:0.5px;">
+    <div style="font-size:0.75rem; color:#999; font-style:italic; letter-spacing:0.5px;">
         Listening &middot; Reflection &middot; Contemplation
     </div>
     <p class="subtitle" style="margin-top:0.6rem;">Transcribe · Summarize · Export · Audio · Video · Documents</p>
@@ -156,7 +156,7 @@ st.markdown("""
         Distill the wisdom of sacred discourses into
         <span style="color:#c9a96e;">clear, lasting insights.</span>
     </div>
-    <div style="font-size:1rem; color:#777; line-height:1.8; max-width:560px;
+    <div style="font-size:1rem; color:#aaa; line-height:1.8; max-width:560px;
                 margin-bottom:1.5rem;">
         Upload your spiritual discourses — in audio or video — and receive a beautifully structured transcript, summary, and table of key teachings, with Sanskrit terms transliterated into English. Output is available in <b style='color:#b8a88a;'>English (default)</b>, <b style='color:#b8a88a;'>Hindi</b>, <b style='color:#b8a88a;'>Kannada</b>, <b style='color:#b8a88a;'>Telugu</b>, and <b style='color:#b8a88a;'>Tamil</b>.
     </div>
@@ -175,41 +175,37 @@ st.markdown("""
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
             <span style="color:#c9a96e; font-size:1rem;">✦</span>
-            <span style="font-size:0.85rem; color:#666;">5 Language Outputs</span>
+            <span style="font-size:0.85rem; color:#999;">5 Language Outputs</span>
         </div>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
 # ── Quote with Gurudev photo ──────────────────────────────────────────────────
-st.markdown(f"""
-<div class="quote-block">
-    <div style="display:flex; align-items:center; justify-content:center;
-                gap:2rem; flex-wrap:wrap;">
-        <div style="flex-shrink:0; text-align:center;">
-            {gurudev_tag}
-            <div style="font-size:0.72rem; color:#555; margin-top:6px;
-                        font-style:italic; letter-spacing:0.3px;">
-                Pūjya Swāmī Chinmayānanda
-            </div>
-        </div>
-        <div style="flex:1; min-width:260px; text-align:left;">
-            <div class="quote-text" style="text-align:left;">
-                "Renounce your ego" is the Lord's only request;<br>
-                "And I will make you God" is the promise.
-            </div>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                        color:#c9a96e; font-style:italic; letter-spacing:0.5px; margin-top:0.5rem;">
-                — <em>Pūjya Swāmī Chinmayānanda</em>
-            </div>
-            <div style="font-size:0.75rem; color:#555; margin-top:0.2rem;
-                        font-style:italic; letter-spacing:0.3px;">
-                (Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)
-            </div>
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+quote_html = (
+    "<div class='quote-block'>"
+    "<div style='display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;'>"
+    "<div style='flex-shrink:0;text-align:center;'>"
+    + gurudev_tag +
+    "<div style='font-size:0.72rem;color:#888;margin-top:6px;font-style:italic;'>"
+    "Pūjya Swāmī Chinmayānanda"
+    "</div></div>"
+    "<div style='flex:1;min-width:260px;text-align:left;'>"
+    "<div style='font-family:Cormorant Garamond,serif;font-style:italic;"
+    "font-size:1.05rem;color:#c9a96e;line-height:1.8;'>"
+    "“Renounce your ego” is the Lord’s only request;<br/>"
+    "“And I will make you God” is the promise."
+    "</div>"
+    "<div style='font-family:Cormorant Garamond,serif;font-size:1.05rem;"
+    "color:#c9a96e;font-style:italic;margin-top:0.5rem;'>"
+    "— <em>Pūjya Swāmī Chinmayānanda</em>"
+    "</div>"
+    "<div style='font-size:0.75rem;color:#777;margin-top:0.2rem;font-style:italic;'>"
+    "(Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)"
+    "</div>"
+    "</div></div></div>"
+)
+st.markdown(quote_html, unsafe_allow_html=True)
 
 # ── About box ──────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -247,20 +243,3 @@ with col2:
         <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Video Summarizer</div>
         <div style="font-size:0.78rem; color:#666;">Paste a YouTube URL or upload an MP4 file</div>
     </div>
-    """, unsafe_allow_html=True)
-    if st.button("🎬 Open Video Summarizer", key="btn_video"):
-        st.switch_page("pages/4_Video_Summarizer.py")
-
-with col3:
-    st.markdown("""
-    <div style="background:#111; border:1px solid #2a2a2a; border-top:3px solid #c9a96e;
-                border-radius:12px; padding:1.2rem; text-align:center; min-height:140px;">
-        <div style="font-size:1.8rem; margin-bottom:0.4rem;">📄</div>
-        <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Document Combiner</div>
-        <div style="font-size:0.78rem; color:#666;">Merge multiple transcripts into one beautiful document</div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("📄 Open Document Combiner", key="btn_doc"):
-        st.switch_page("pages/3_Document_Combiner_new.py")
-
-st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
