@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
 from utils.styles import SHARED_CSS
 
 st.set_page_config(
-    page_title="Get the App · Suma AI Hub",
+    page_title="Get the App · Wisdom Distiller",
     page_icon="📱",
     layout="centered"
 )
@@ -20,7 +20,7 @@ st.markdown(SHARED_CSS, unsafe_allow_html=True)
 st.markdown("""
 <div class="hero">
     <h1>📱 Get the <span class="accent">App</span></h1>
-    <p class="subtitle">Use the Discourse Summarizer on your iPhone, Android, or Desktop</p>
+    <p class="subtitle">Use the Wisdom Distiller on your iPhone, Android, or Desktop</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -303,7 +303,7 @@ with tab_share:
 
     st.markdown(
         "<div class='about-box'>"
-        "Share the Discourse Summarizer with fellow Vedantins, seekers, and anyone interested. "
+        "Share the Wisdom Distiller with fellow Vedantins, seekers, and anyone interested. "
         "No installation required — works on any device instantly."
         "</div>",
         unsafe_allow_html=True
