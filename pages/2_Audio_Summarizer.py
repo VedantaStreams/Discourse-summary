@@ -9,12 +9,12 @@ if str(ROOT) not in sys.path:
 from utils.styles import SHARED_CSS
 from utils.helpers import (
     prepare_audio_chunks, transcribe_chunks,
-    summarize_text, make_pdf, make_docx, TABLE_COLUMNS,
-    markdown_table_to_html, TABLE_CSS
+    summarize_text, translate_text, make_pdf, make_docx,
+    TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS, LANGUAGES
 )
 import time
 
-st.set_page_config(page_title="Audio Summarizer · Suma AI Hub", page_icon="🎙️", layout="centered")
+st.set_page_config(page_title="Audio Summarizer · Wisdom Distiller", page_icon="🎙️", layout="centered")
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
 anthropic_key = st.session_state.get("anthropic_key", "")
@@ -88,6 +88,12 @@ if uploaded_files:
         if not selected_columns:
             st.warning("Please select at least one column.")
 
+    with st.columns(2)[0]:
+        output_language = st.selectbox(
+            "Output language",
+            list(LANGUAGES.keys()),
+            key="audio_lang"
+        )
     show_transcript = st.checkbox("Show full transcript on page", value=False)
     st.markdown("---")
 
@@ -111,6 +117,14 @@ if uploaded_files:
 
             status_text.markdown("**Transcription done! Summarizing with Claude…**")
             summary = summarize_text(transcript, summary_style, selected_columns, anthropic_key)
+            progress_bar.progress(0.90)
+
+            # Translate if needed
+            target_lang = LANGUAGES.get(output_language)
+            if target_lang:
+                status_text.markdown(f"**Translating to {target_lang}...**")
+                summary = translate_text(summary, target_lang, anthropic_key)
+                transcript = translate_text(transcript, target_lang, anthropic_key)
             progress_bar.progress(1.0)
             status_text.markdown("✅ **Done!**")
 
