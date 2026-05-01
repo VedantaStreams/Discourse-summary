@@ -8,7 +8,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 from utils.styles import SHARED_CSS
 
-st.set_page_config(page_title="About · Suma AI Hub", page_icon="🕉️", layout="centered")
+st.set_page_config(page_title="About · Wisdom Distiller", page_icon="🕉️", layout="centered")
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
 def img_b64(path: str, mime: str = "image/jpeg") -> str:
@@ -22,21 +22,21 @@ om_tag = f'<img class="om" src="{img_b64(str(om_path))}" alt="Om"/>' if om_path.
 
 if headshot_path.exists():
     hs_src = img_b64(str(headshot_path))
-    headshot_html = f'<img src="{hs_src}" alt="Dr. Suma Rajashankar" style="width:180px;height:180px;border-radius:50%;object-fit:cover;border:3px solid #c9a96e;display:block;margin:0 auto 1rem;box-shadow:0 0 28px rgba(201,169,110,0.35);"/>'
+    headshot_html = f'<img src="{hs_src}" alt="Suma Rajashankar" style="width:180px;height:180px;border-radius:50%;object-fit:cover;border:3px solid #c9a96e;display:block;margin:0 auto 1rem;box-shadow:0 0 28px rgba(201,169,110,0.35);"/>'
 else:
     headshot_html = '<div style="width:160px;height:160px;border-radius:50%;background:#1e1e1e;border:2px solid #c9a96e;display:flex;align-items:center;justify-content:center;font-family:Cormorant Garamond,serif;font-size:2rem;color:#c9a96e;margin:0 auto 1rem;">SR</div>'
 
 st.markdown(f"""
 <div class="hero">
     {om_tag}
-    <h1>About <span class="accent">Dr. Suma Rajashankar</span></h1>
+    <h1>About <span class="accent">Suma Rajashankar</span></h1>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown(f"""
 <div style="text-align:center; padding: 1.5rem 0 0.5rem;">
     {headshot_html}
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:#e8e0d4;">Dr. Suma Rajashankar</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:#e8e0d4;">Suma Rajashankar</div>
     <div style="font-size:0.85rem; color:#c9a96e; letter-spacing:0.8px; text-transform:uppercase; margin-top:0.3rem;">
         Senior Data Scientist / AI Engineer · Capital One
     </div>
@@ -48,29 +48,29 @@ st.markdown(f"""
 st.markdown("""
 <div style="max-width:680px; margin: 0 auto; font-size:0.95rem; color:#999; line-height:1.85;">
 
-<p>Dr. Suma Rajashankar holds a <b style="color:#b8a88a;">PhD in Physics</b> from the Indian Institute
-of Science and completed her postdoctoral research at <b style="color:#b8a88a;">Stony Brook University</b>.
-She went on to serve as an <b style="color:#b8a88a;">Assistant Professor</b> at Northern Illinois
-University, where she taught across Electrical and Industrial Engineering disciplines for over
-<b style="color:#b8a88a;">15 years</b>, shaping the academic journeys of countless students.</p>
+<p>Suma Rajashankar holds a <b style="color:#b8a88a;">PhD in Physics</b> from the Indian Institute
+of Science and completed postdoctoral research at <b style="color:#b8a88a;">Stony Brook University</b>.
+She served as an <b style="color:#b8a88a;">Assistant Professor</b> at Northern Illinois University,
+teaching across Electrical and Industrial Engineering disciplines for over
+<b style="color:#b8a88a;">18 years</b>.</p>
 
-<p>In a bold and purposeful career transition, she moved into <b style="color:#b8a88a;">AI and Data Science</b>
-five years ago, contributing to impactful work at <b style="color:#b8a88a;">Discover Financial Services</b>
-and currently at <b style="color:#b8a88a;">Capital One</b>. Her expertise spans
-<b style="color:#b8a88a;">Generative AI</b>, Speech Recognition technologies, and
-<b style="color:#b8a88a;">Responsible AI</b>, where she has played a key role in developing guardrails
-for enterprise-scale AI engineering platforms.</p>
+<p>Wishing to broaden her horizons and gain experience beyond academia, she transitioned into the
+<b style="color:#b8a88a;">corporate world</b> — bringing her deep academic foundation into the field
+of <b style="color:#b8a88a;">AI and Data Science</b>. She has since contributed to impactful work at
+<b style="color:#b8a88a;">Discover Financial Services</b> and currently at
+<b style="color:#b8a88a;">Capital One</b>, spanning Generative AI, Speech Recognition, and
+Responsible AI — including the development of guardrails for enterprise-scale AI engineering
+platforms.</p>
 
-<p>Beyond her professional pursuits, Dr. Rajashankar has a deep and abiding interest in philosophy,
-particularly the study of <b style="color:#b8a88a;">Vedanta</b>. She has been closely associated with
-the <b style="color:#b8a88a;">Chinmaya Mission</b> for over two decades and finds great joy in the
-systematic study of the Upanishads, the Bhagavad Gita, and traditional Prakarana Granthas, reflecting
-a lifelong commitment to inner growth and inquiry.</p>
+<p>She considers herself a <b style="color:#b8a88a;">humble and earnest seeker on the spiritual
+path</b>, and a <b style="color:#b8a88a;">devoted student of Vedanta</b>, blessed to be closely
+associated with the <b style="color:#b8a88a;">Chinmaya Mission</b>. Through study groups,
+satsangs, and the systematic study of the Upanishads, the Bhagavad Gita, and the Prakarana
+Granthas, this remains a personal journey of reflection, gratitude, and grace.</p>
 
-<p>Driven by a passion for both knowledge and mentorship, she actively guides working professionals
-through <b style="color:#b8a88a;">AIML and AIDL programs</b> in collaboration with the
-<b style="color:#b8a88a;">University of Texas at Austin</b> and <b style="color:#b8a88a;">Great Learning</b>,
-helping them navigate and excel in the evolving AI landscape.</p>
+<p>She also guides working professionals through <b style="color:#b8a88a;">AIML and AIDL programs</b>
+in collaboration with the <b style="color:#b8a88a;">University of Texas at Austin</b> and
+<b style="color:#b8a88a;">Great Learning</b> — a small way of giving back.</p>
 
 </div>
 <hr style="border-color:#1e1e1e; margin: 1.5rem auto; max-width:680px;"/>
@@ -118,7 +118,7 @@ st.markdown("""
     </div>
     <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:#c9a96e;
                 font-style:italic; letter-spacing:0.5px; margin-top:0.6rem;">
-        — <em>Pūjya Swāmī Chinmayānanda jī</em>
+        — <em>Pūjya Swāmī Chinmayānanda</em>
     </div>
     <div style="font-size:0.75rem; color:#555; margin-top:0.2rem; font-style:italic; letter-spacing:0.3px;">
         (Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)
