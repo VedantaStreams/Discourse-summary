@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
 from utils.styles import SHARED_CSS
 
 st.set_page_config(
-    page_title="Reverence & Gratitude · Suma AI Hub",
+    page_title="Reverence & Gratitude · Wisdom Distiller",
     page_icon="🙏",
     layout="centered"
 )
@@ -52,9 +52,9 @@ st.markdown("""
             🔹 Pranāms &amp; Gratitude
         </div>
         <div style="font-size:0.95rem; color:#aaa; line-height:1.9; font-style:italic;">
-            I offer my humble pranāms and heartfelt gratitude to my spiritual Gurus
+            I offer my humble pranāms and heartfelt gratitude to
             <span style="color:#c9a96e; font-style:normal; font-weight:500;">
-                Pūjya Swami Aparājitānanda jī
+                Pūjya Swami Aparājitānandajī
             </span>
             and
             <span style="color:#c9a96e; font-style:normal; font-weight:500;">
