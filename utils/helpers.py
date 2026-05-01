@@ -45,11 +45,15 @@ def get_duration(path: str) -> float:
 # ── Audio splitting ────────────────────────────────────────────────────────────
 
 def split_audio_ffmpeg(path: str) -> list:
-    """Split audio into chunks under 25MB using ffmpeg."""
+    """Split audio into chunks under 25MB using ffmpeg.
+    If file is already small enough, return as-is without calling ffmpeg."""
     file_size_mb = os.path.getsize(path) / (1024 * 1024)
+
+    # Small file — no splitting needed, no ffmpeg call needed
     if file_size_mb <= CHUNK_MB:
         return [path]
 
+    # Large file — need to split using ffmpeg
     duration = get_duration(path)
     n_chunks = math.ceil(file_size_mb / CHUNK_MB)
     chunk_sec = math.ceil(duration / n_chunks)
@@ -59,7 +63,7 @@ def split_audio_ffmpeg(path: str) -> list:
     for i in range(n_chunks):
         start = i * chunk_sec
         out = os.path.join(tmp_dir, f"chunk_{i+1}.mp3")
-        subprocess.run(
+        result = subprocess.run(
             ["ffmpeg", "-y", "-i", path,
              "-ss", str(start), "-t", str(chunk_sec),
              "-acodec", "libmp3lame", "-q:a", "4", out],
@@ -67,6 +71,11 @@ def split_audio_ffmpeg(path: str) -> list:
         )
         if os.path.exists(out) and os.path.getsize(out) > 0:
             chunks.append(out)
+
+    # If splitting failed for any reason, return original file
+    if not chunks:
+        return [path]
+
     return chunks
 
 
@@ -240,6 +249,46 @@ def summarize_text(transcript: str, style: str,
     else:
         prompt = STYLE_PROMPTS.get(style, STYLE_PROMPTS["Bullet highlights"])
         return call_claude(prompt, transcript)
+
+
+# ── Translation ───────────────────────────────────────────────────────────────
+
+LANGUAGES = {
+    'English (default)': None,
+    'Hindi (हिन्दी)': 'Hindi',
+    'Kannada (ಕನ್ನಡ)': 'Kannada',
+    'Telugu (తెలుగు)': 'Telugu',
+    'Tamil (தமிழ்)': 'Tamil',
+}
+
+def translate_text(text, language, anthropic_key):
+    """Translate text to target language using Claude. Sanskrit terms preserved."""
+    import anthropic
+    client = anthropic.Anthropic(api_key=anthropic_key)
+    max_chars = 150_000
+
+    instruction = (
+        "Translate the following text into " + language + ". "
+        "Keep all Sanskrit terms, mantras, names of scriptures "
+        "(such as Atman, Brahman, Maya, Upanishads, Bhagavad Gita) "
+        "in their original Sanskrit form - do not translate them. "
+        "Preserve all structure, formatting, bullet points, and headings exactly. "
+        "Only translate the non-Sanskrit content into " + language + "."
+    )
+
+    def call(t):
+        msg = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=4000,
+            messages=[{"role": "user", "content": instruction + "\n\n" + t}],
+        )
+        return msg.content[0].text
+
+    if len(text) > max_chars:
+        parts = [text[i:i+max_chars] for i in range(0, len(text), max_chars)]
+        return "\n\n".join(call(p) for p in parts)
+    return call(text)
+
 
 
 # ── PDF export ─────────────────────────────────────────────────────────────────
