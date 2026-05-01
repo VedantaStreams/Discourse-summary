@@ -152,9 +152,7 @@ st.markdown("""
     </div>
     <div style="font-size:1rem; color:#777; line-height:1.8; max-width:560px;
                 margin-bottom:1.5rem;">
-        Upload your spiritual discourses — in audio or video — and receive
-        a beautifully structured transcript, summary, and table of key teachings,
-        with Sanskrit terms transliterated into English.
+        Upload your spiritual discourses — in audio or video — and receive a beautifully structured transcript, summary, and table of key teachings, with Sanskrit terms transliterated into English. Output is available in <b style='color:#b8a88a;'>English (default)</b>, <b style='color:#b8a88a;'>Hindi</b>, <b style='color:#b8a88a;'>Kannada</b>, <b style='color:#b8a88a;'>Telugu</b>, and <b style='color:#b8a88a;'>Tamil</b>.
     </div>
     <div style="display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center;">
         <div style="display:flex; align-items:center; gap:8px;">
@@ -243,4 +241,3 @@ with col3:
         st.switch_page("pages/3_Document_Combiner_new.py")
 
 st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
-
