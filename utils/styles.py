@@ -22,7 +22,7 @@ h1, h2, h3 { font-family: 'Cormorant Garamond', serif; color: #e8e0d4; }
     font-size: 3.8rem; font-weight: 600;
     letter-spacing: 1px; color: #e8e0d4; margin: 0 0 0.2rem;
 }
-.hero .subtitle { font-size: 0.88rem; color: #666; font-weight: 300; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+.hero .subtitle { font-size: 0.88rem; color: #aaa; font-weight: 300; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
 .accent { color: #c9a96e; }
 
 .quote-block { text-align: center; padding: 0.8rem 2rem 1.2rem; border-bottom: 1px solid #1e1e1e; margin-bottom: 1.5rem; }
