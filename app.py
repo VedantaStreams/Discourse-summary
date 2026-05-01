@@ -262,3 +262,31 @@ with col3:
         st.switch_page("pages/4_Document_Combiner.py")
 
 st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
+
+# ── Quote with Gurudev photo ──────────────────────────────────────────────
+quote_html = (
+    "<div class='quote-block'>"
+    "<div style='display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;'>"
+    "<div style='flex-shrink:0;text-align:center;'>"
+    + gurudev_tag +
+    "<div style='font-size:0.72rem;color:#888;margin-top:6px;font-style:italic;'>"
+    "ūjya Swāmī Chinmayānanda"
+    "</div></div>"
+    "<div style='flex:1;min-width:260px;text-align:left;'>"
+    "<div style='font-family:Cormorant Garamond,serif;font-style:italic;"
+    "font-size:1.05rem;color:#c9a96e;line-height:1.8;'>"
+    "“Renounce your ego” is the Lord’s only request;<br/>"
+    "“And I will make you God” is the promise."
+    "</div>"
+    "<div style='font-family:Cormorant Garamond,serif;font-size:1.05rem;"
+    "color:#c9a96e;font-style:italic;margin-top:0.5rem;'>"
+    "— <em>Pūjya Swāmī Chinmayānanda</em>"
+    "</div>"
+    "<div style='font-size:0.75rem;color:#777;margin-top:0.2rem;font-style:italic;'>"
+    "(Pūjya Swāmī Chinmayānanda — the Bliss of Pure Consciousness)"
+    "</div>"
+    "</div></div></div>"
+)
+st.markdown(quote_html, unsafe_allow_html=True)
+
+
