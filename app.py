@@ -47,25 +47,26 @@ def img_b64(path: str, mime: str = "image/jpeg") -> str:
         return f"data:{mime};base64,{base64.b64encode(f.read()).decode()}"
 
 om_path = Path(__file__).parent / "Om.jpeg"
-gurudev_path = Path(__file__).parent / "gurudev.jpeg"
 om_tag = f'<img class="om" src="{img_b64(str(om_path))}" alt="Om"/>' if om_path.exists() else '<div style="font-size:2.5rem">🕉️</div>'
 
 headshot_path = Path(__file__).parent / "headshot.jpeg"
+if headshot_path.exists():
+    hs_src = img_b64(str(headshot_path))
+    avatar_tag = f'''\n<img src="{hs_src}" alt="Suma Rajashankar"\n     style="width:110px;height:110px;border-radius:50%;object-fit:cover;\n            border:3px solid #c9a96e;display:block;margin:0 auto 0.6rem;\n            box-shadow:0 0 20px rgba(201,169,110,0.3);"/>'''
+else:
+    avatar_tag = '<div class="bio-avatar-placeholder">SR</div>'
+
 gurudev_path = Path(__file__).parent / "gurudev.jpeg"
 if gurudev_path.exists():
     gd_src = img_b64(str(gurudev_path))
-    gurudev_tag = f'<img src="{gd_src}" alt="Pujya Swami Chinmayananda" style="width:130px;height:150px;object-fit:cover;object-position:top;border-radius:8px;border:2px solid #c9a96e;box-shadow:0 0 20px rgba(201,169,110,0.3);"/>'
+    gurudev_tag = ('<img src="' + gd_src + '" alt="Pujya Swami Chinmayananda" '
+                  'style="width:130px;height:150px;object-fit:cover;object-position:top;'
+                  'border-radius:8px;border:2px solid #c9a96e;'
+                  'box-shadow:0 0 20px rgba(201,169,110,0.3);"')
+    gurudev_tag += '/>'  
 else:
-    gurudev_tag = ''
-if headshot_path.exists():
-    hs_src = img_b64(str(headshot_path))
-    avatar_tag = f'''
-<img src="{hs_src}" alt="Suma Rajashankar"
-     style="width:110px;height:110px;border-radius:50%;object-fit:cover;
-            border:3px solid #c9a96e;display:block;margin:0 auto 0.6rem;
-            box-shadow:0 0 20px rgba(201,169,110,0.3);"/>'''
-else:
-    avatar_tag = '<div class="bio-avatar-placeholder">SR</div>'
+    gurudev_tag = ""
+
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -243,3 +244,23 @@ with col2:
     <div style="background:#111; border:1px solid #2a2a2a; border-top:3px solid #c9a96e;
                 border-radius:12px; padding:1.2rem; text-align:center; min-height:140px;">
         <div style="font-size:1.8rem; margin-bottom:0.4rem;">🎬</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Video Summarizer</div>
+        <div style="font-size:0.78rem; color:#666;">Paste a YouTube URL or upload an MP4 file</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("🎬 Open Video Summarizer", key="btn_video"):
+        st.switch_page("pages/4_Video_Summarizer.py")
+
+with col3:
+    st.markdown("""
+    <div style="background:#111; border:1px solid #2a2a2a; border-top:3px solid #c9a96e;
+                border-radius:12px; padding:1.2rem; text-align:center; min-height:140px;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">📄</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Document Combiner</div>
+        <div style="font-size:0.78rem; color:#666;">Merge multiple transcripts into one beautiful document</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("📄 Open Document Combiner", key="btn_doc"):
+        st.switch_page("pages/3_Document_Combiner_new.py")
+
+st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
