@@ -7,9 +7,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from utils.styles import SHARED_CSS
-from utils.helpers import summarize_text, make_pdf, make_docx, TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS
+from utils.helpers import summarize_text, translate_text, make_pdf, make_docx, TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS, LANGUAGES
 
-st.set_page_config(page_title="Document Combiner · Suma AI Hub", page_icon="📄", layout="centered")
+st.set_page_config(page_title="Document Combiner · Wisdom Distiller", page_icon="📄", layout="centered")
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
 anthropic_key = st.session_state.get("anthropic_key", "")
@@ -83,6 +83,11 @@ if uploaded_txts:
             cols = list(TABLE_COLUMNS.keys())
             selected_columns = st.multiselect("Choose table columns", cols, default=cols)
 
+    output_language = st.selectbox(
+        "Output language",
+        list(LANGUAGES.keys()),
+        key="doc_lang"
+    )
     st.markdown("---")
     if not anthropic_key and mode == "Merge & re-summarize into one document":
         st.warning("⚠️ Anthropic API key needed for re-summarization. Enter it on the main page sidebar.")
