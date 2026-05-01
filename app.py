@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 from utils.styles import SHARED_CSS
 
 st.set_page_config(
-    page_title="Discourse Summarizer · Suma AI Hub",
+    page_title="Wisdom Distiller · Suma AI Hub",
     page_icon="🕉️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -53,7 +53,7 @@ headshot_path = Path(__file__).parent / "headshot.jpeg"
 if headshot_path.exists():
     hs_src = img_b64(str(headshot_path))
     avatar_tag = f'''
-<img src="{hs_src}" alt="Dr. Suma Rajashankar"
+<img src="{hs_src}" alt="Suma Rajashankar"
      style="width:110px;height:110px;border-radius:50%;object-fit:cover;
             border:3px solid #c9a96e;display:block;margin:0 auto 0.6rem;
             box-shadow:0 0 20px rgba(201,169,110,0.3);"/>'''
@@ -67,7 +67,7 @@ with st.sidebar:
 <div style="text-align:center; padding: 0.8rem 0 0.4rem;">
     {avatar_tag}
     <p style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600;
-              color:#e8e0d4; margin:0 0 0.15rem;">Dr. Suma Rajashankar</p>
+              color:#e8e0d4; margin:0 0 0.15rem;">Suma Rajashankar</p>
     <p style="font-size:0.72rem; color:#c9a96e; letter-spacing:0.4px;
               text-transform:uppercase; margin:0 0 0.5rem;">
         Senior Data Scientist / AI Engineer
@@ -125,8 +125,51 @@ with st.sidebar:
 st.markdown(f"""
 <div class="hero">
     {om_tag}
-    <h1>Discourse <span class="accent">Summarizer</span></h1>
-    <p class="subtitle">Transcribe · Summarize · Export · Audio · Video · Documents</p>
+    <h1>Wisdom <span class="accent">Distiller</span></h1>
+    <div style="font-family:'Cormorant Garamond',serif; font-style:italic;
+                font-size:1.05rem; color:#c9a96e; letter-spacing:1px; margin:0.3rem 0 0.1rem;">
+        &#x15B;rava&#x1E47;a &middot; Manana &middot; Nididhy&#x101;sana
+    </div>
+    <div style="font-size:0.82rem; color:#555; letter-spacing:0.8px; margin-bottom:0.2rem;">
+        &#x936;&#x94D;&#x930;&#x935;&#x923; &middot; &#x92E;&#x928;&#x928; &middot; &#x928;&#x93F;&#x926;&#x93F;&#x927;&#x94D;&#x92F;&#x93E;&#x938;&#x928;
+    </div>
+    <div style="font-size:0.75rem; color:#3a3a3a; font-style:italic; letter-spacing:0.5px;">
+        Listening &middot; Reflection &middot; Contemplation
+    </div>
+    <p class="subtitle" style="margin-top:0.6rem;">Transcribe · Summarize · Export · Audio · Video · Documents</p>
+</div>
+""", unsafe_allow_html=True)
+
+# ── Bold tagline ───────────────────────────────────────────────────────────────
+st.markdown("""
+<div style="padding: 2rem 1rem 1rem; max-width: 720px; margin: 0 auto;">
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.6rem;
+                font-weight:600; line-height:1.25; color:#e8e0d4; margin-bottom:1rem;">
+        Distill the wisdom of sacred<br/>
+        discourses into
+        <span style="color:#c9a96e;">clear,<br/>
+        lasting insights.</span>
+    </div>
+    <div style="font-size:1rem; color:#777; line-height:1.8; max-width:560px;
+                margin-bottom:1.5rem;">
+        Upload your spiritual discourses — in audio or video — and receive
+        a beautifully structured transcript, summary, and table of key teachings,
+        with Sanskrit terms transliterated into English.
+    </div>
+    <div style="display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center;">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#c9a96e; font-size:1rem;">✦</span>
+            <span style="font-size:0.85rem; color:#666;">AI-Powered Transcription</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#c9a96e; font-size:1rem;">✦</span>
+            <span style="font-size:0.85rem; color:#666;">Sanskrit Transliteration</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span style="color:#c9a96e; font-size:1rem;">✦</span>
+            <span style="font-size:0.85rem; color:#666;">Export as PDF or Word</span>
+        </div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -150,7 +193,7 @@ st.markdown("""
 # ── About box ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="about-box">
-    <b>Welcome to the Discourse Summarizer</b> — an AI-powered platform for transcribing and summarizing
+    <b>Welcome to Wisdom Distiller</b> — an AI-powered platform for transcribing and summarizing
     spiritual discourses, lectures, and educational content. Upload <b>audio files</b> (MP3, WAV, M4A)
     or <b>video files</b> (MP4) or paste a <b>YouTube link</b> — get back a clean transcript, structured
     summary, or a beautifully formatted table of key insights. Export everything as <b>PDF or Word</b>.
@@ -200,3 +243,4 @@ with col3:
         st.switch_page("pages/3_Document_Combiner_new.py")
 
 st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
+
