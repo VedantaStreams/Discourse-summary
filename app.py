@@ -208,15 +208,17 @@ quote_html = (
 st.markdown(quote_html, unsafe_allow_html=True)
 
 # ── About box ──────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="about-box">
-    <b>Welcome to Wisdom Distiller</b> — an AI-powered platform for transcribing and summarizing
-    spiritual discourses, lectures, and educational content. Upload <b>audio files</b> (MP3, WAV, M4A)
-    or <b>video files</b> (MP4) or paste a <b>YouTube link</b> — get back a clean transcript, structured
-    summary, or a beautifully formatted table of key insights. Export everything as <b>PDF or Word</b>.
-    Click any tool below to get started.
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    "<div class='about-box'>"
+    "<b>Welcome to Wisdom Distiller</b> \u2014 an AI-powered platform for transcribing and summarizing "
+    "spiritual discourses, lectures, and educational content. Upload <b>audio files</b> (MP3, WAV, M4A) "
+    "or <b>video files</b> (MP4) \u2014 get back a clean transcript, structured summary, or a "
+    "beautifully formatted table of key insights, with Sanskrit terms transliterated into English. "
+    "Output available in <b>English</b>, <b>Hindi</b>, <b>Kannada</b>, <b>Telugu</b>, and <b>Tamil</b>. "
+    "Click any tool below to get started."
+    "</div>",
+    unsafe_allow_html=True
+)
 
 # ── Navigation cards with buttons ─────────────────────────────────────────────
 st.markdown("## Choose a Tool")
@@ -243,3 +245,20 @@ with col2:
         <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Video Summarizer</div>
         <div style="font-size:0.78rem; color:#666;">Paste a YouTube URL or upload an MP4 file</div>
     </div>
+    """, unsafe_allow_html=True)
+    if st.button("🎬 Open Video Summarizer", key="btn_video"):
+        st.switch_page("pages/3_Video_Summarizer.py")
+
+with col3:
+    st.markdown("""
+    <div style="background:#111; border:1px solid #2a2a2a; border-top:3px solid #c9a96e;
+                border-radius:12px; padding:1.2rem; text-align:center; min-height:140px;">
+        <div style="font-size:1.8rem; margin-bottom:0.4rem;">📄</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#e8e0d4; margin-bottom:0.4rem;">Document Combiner</div>
+        <div style="font-size:0.78rem; color:#666;">Merge multiple transcripts into one beautiful document</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("📄 Open Document Combiner", key="btn_doc"):
+        st.switch_page("pages/4_Document_Combiner.py")
+
+st.markdown("<br/><small style='color:#333'>Or use the sidebar navigation (☰) to open each tool.</small>", unsafe_allow_html=True)
