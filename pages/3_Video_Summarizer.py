@@ -15,15 +15,17 @@ from utils.helpers import (
     split_audio_ffmpeg,
     transcribe_chunks,
     summarize_text,
+    translate_text,
     make_pdf,
     make_docx,
     TABLE_COLUMNS,
     markdown_table_to_html,
-    TABLE_CSS
+    TABLE_CSS,
+    LANGUAGES
 )
 
 st.set_page_config(
-    page_title="Video Summarizer · Suma AI Hub",
+    page_title="Video Summarizer · Wisdom Distiller",
     page_icon="🎬",
     layout="centered"
 )
