@@ -36,7 +36,7 @@ st.markdown(f"""
 st.markdown(f"""
 <div style="text-align:center; padding: 1.5rem 0 0.5rem;">
     {headshot_html}
-    <div style="font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:#e8e0d4;">Suma Rajashankar</div>
+    <div style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:600; color:#e8e0d4;">Suma Rajashankar</div>
     <div style="font-size:0.85rem; color:#c9a96e; letter-spacing:0.8px; text-transform:uppercase; margin-top:0.3rem;">
         Senior Data Scientist / AI Engineer · Capital One
     </div>
@@ -80,7 +80,7 @@ in collaboration with the <b style="color:#b8a88a;">University of Texas at Austi
 c1, c2, c3 = st.columns(3)
 for col, num, label in [
     (c1, "350+", "Professionals Mentored"),
-    (c2, "300+", "Hours of AI/ML Instruction"),
+    (c2, "400+", "Hours of AI/ML Instruction"),
     (c3, "4.75–5.0", "Mentor Rating (4 Years)"),
 ]:
     with col:
