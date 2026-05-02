@@ -262,18 +262,22 @@ LANGUAGES = {
 }
 
 def translate_text(text, language, anthropic_key):
-    """Translate text to target language using Claude. Sanskrit terms preserved."""
+    """Translate text fully into target language. Sanskrit terms preserved as-is."""
     import anthropic
     client = anthropic.Anthropic(api_key=anthropic_key)
     max_chars = 150_000
 
     instruction = (
-        "Translate the following text into " + language + ". "
-        "Keep all Sanskrit terms, mantras, names of scriptures "
-        "(such as Atman, Brahman, Maya, Upanishads, Bhagavad Gita) "
-        "in their original Sanskrit form - do not translate them. "
-        "Preserve all structure, formatting, bullet points, and headings exactly. "
-        "Only translate the non-Sanskrit content into " + language + "."
+        "You are a translator. Translate ALL of the following text completely into "
+        + language + ". "
+        "Every word, label, heading, bullet point, and sentence must be in "
+        + language + " only. "
+        "Do NOT leave any English words in the output except for: "
+        "Sanskrit terms (Atman, Brahman, Maya, Upanishads, Bhagavad Gita, etc.), "
+        "proper nouns (names of people and places), "
+        "and technical terms that have no equivalent in " + language + ". "
+        "Preserve the structure, formatting, bullet points, and headings exactly. "
+        "The entire output must read as natural, fluent " + language + "."
     )
 
     def call(t):
