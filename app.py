@@ -60,17 +60,19 @@ if headshot_path.exists():
 else:
     avatar_tag = '<div class="bio-avatar-placeholder">SR</div>'
 
-gurudev_path = Path(__file__).parent / "gurudev.jpeg"
-if gurudev_path.exists():
-    gd_src = img_b64(str(gurudev_path))
-    gurudev_img = (
-        f'<img src="{gd_src}" alt="Pujya Swami Chinmayananda"'
-        ' style="width:140px;height:160px;object-fit:cover;object-position:top;'
-        'border-radius:10px;border:2px solid #c9a96e;'
-        'box-shadow:0 0 24px rgba(201,169,110,0.35);display:block;margin:0 auto;"/>'
-    )
-else:
-    gurudev_img = '<div style="font-size:3rem;text-align:center;">🕉️</div>'
+# Try multiple possible filenames for Gurudev photo
+gurudev_img = '<div style="font-size:3rem;text-align:center;">🕉️</div>'
+for _gd_name in ["gurudev.jpeg", "gurudev.jpg", "Gurudev.jpg", "Gurudev.jpeg"]:
+    _gd_path = Path(__file__).parent / _gd_name
+    if _gd_path.exists():
+        _gd_src = img_b64(str(_gd_path))
+        gurudev_img = (
+            '<img src="' + _gd_src + '" alt="Pujya Swami Chinmayananda"'
+            ' style="width:150px;height:170px;object-fit:cover;object-position:top;'
+            'border-radius:10px;border:2px solid #c9a96e;'
+            'box-shadow:0 0 24px rgba(201,169,110,0.4);display:block;margin:0 auto;"/>'
+        )
+        break
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -281,4 +283,3 @@ st.markdown(
     "</div></div>",
     unsafe_allow_html=True
 )
-
