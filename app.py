@@ -153,7 +153,7 @@ st.markdown(
     "<div style='text-align:center; padding:1.5rem 2rem 1rem; max-width:700px; margin:0 auto;'>"
     "<div style='font-family:Cormorant Garamond,serif; font-size:1.6rem; font-weight:600;"
     " line-height:1.4; color:#f0e8d8; margin-bottom:1rem;'>"
-    "Distill the wisdom of sacred discourses into "
+    "Distill the wisdom of sacred discourses into<br/>"
     "<span style='color:#c9a96e;'>clear, lasting insights.</span>"
     "</div>"
     "<div style='font-size:0.95rem; color:#aaa; line-height:1.85; margin:0 auto 1.2rem;'>"
