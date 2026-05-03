@@ -45,10 +45,12 @@ st.markdown(
 
 
 # ── Tabs ───────────────────────────────────────────────────────────────────────
-tab_iphone, tab_android, tab_api, tab_share = st.tabs([
+tab_iphone, tab_android, tab_api, tab_pricing, tab_feedback, tab_share = st.tabs([
     "🍎 iPhone",
     "🤖 Android",
     "🔑 API Setup (After 5 Uses)",
+    "💰 Pricing",
+    "📝 Feedback",
     "🔗 Share with Others"
 ])
 
@@ -295,6 +297,193 @@ with tab_api:
         unsafe_allow_html=True
     )
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PRICING TAB
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_pricing:
+    st.markdown(
+        "<div class='about-box'>"
+        "This app is free for your first <b>5 sessions</b>. After that, you set up your own "
+        "API keys and pay only for what you use. Both services are pay-as-you-go — "
+        "no subscriptions, no monthly fees."
+        "</div>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:0.5rem 0 0.8rem;'>"
+        "Cost Per Session</div>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
+        " padding:1.2rem 1.5rem; margin-bottom:1rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:2;'>"
+        "<div style='display:grid; grid-template-columns:2fr 1fr 1fr 1fr;"
+        " gap:0.5rem; font-size:0.78rem;'>"
+        "<div style='color:#c9a96e; font-weight:500;'>Audio Length</div>"
+        "<div style='color:#c9a96e; text-align:right;'>Whisper</div>"
+        "<div style='color:#c9a96e; text-align:right;'>Claude</div>"
+        "<div style='color:#c9a96e; text-align:right;'>Total</div>"
+        "<div style='color:#aaa; border-top:1px solid #2a2a2a; padding-top:6px;'>20 minutes</div>"
+        "<div style='color:#aaa; text-align:right; border-top:1px solid #2a2a2a; padding-top:6px;'>~$0.12</div>"
+        "<div style='color:#aaa; text-align:right; border-top:1px solid #2a2a2a; padding-top:6px;'>~$0.02</div>"
+        "<div style='color:#c9a96e; text-align:right; border-top:1px solid #2a2a2a; padding-top:6px; font-weight:500;'>~$0.14</div>"
+        "<div style='color:#aaa;'>1 hour</div>"
+        "<div style='color:#aaa; text-align:right;'>~$0.36</div>"
+        "<div style='color:#aaa; text-align:right;'>~$0.03</div>"
+        "<div style='color:#c9a96e; text-align:right; font-weight:500;'>~$0.39</div>"
+        "<div style='color:#aaa;'>1.5 hours</div>"
+        "<div style='color:#aaa; text-align:right;'>~$0.54</div>"
+        "<div style='color:#aaa; text-align:right;'>~$0.05</div>"
+        "<div style='color:#c9a96e; text-align:right; font-weight:500;'>~$0.59</div>"
+        "<div style='color:#aaa;'>+ Translation</div>"
+        "<div style='color:#aaa; text-align:right;'>—</div>"
+        "<div style='color:#aaa; text-align:right;'>~$0.05</div>"
+        "<div style='color:#c9a96e; text-align:right; font-weight:500;'>~$0.05</div>"
+        "</div></div></div>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<div style='font-family:Cormorant Garamond,serif; font-size:1.05rem;"
+        " color:#c9a96e; font-weight:600; margin:1rem 0 0.6rem;'>"
+        "How to Get Started</div>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a; border-radius:12px;"
+        " padding:1.2rem 1.5rem; margin-bottom:0.8rem;'>"
+        "<div style='font-size:0.83rem; color:#888; line-height:1.9;'>"
+        "<b style='color:#b8a88a;'>OpenAI (Whisper transcription)</b><br/>"
+        "&#x2022; Sign up free at "
+        "<a href='https://platform.openai.com/signup' target='_blank'"
+        " style='color:#c9a96e;'>platform.openai.com</a><br/>"
+        "&#x2022; Go to API Keys → Create key<br/>"
+        "&#x2022; Add $5 credit — enough for ~35 sessions of 20-min audio<br/><br/>"
+        "<b style='color:#b8a88a;'>Anthropic (Claude summarization)</b><br/>"
+        "&#x2022; Sign up free at "
+        "<a href='https://console.anthropic.com' target='_blank'"
+        " style='color:#c9a96e;'>console.anthropic.com</a><br/>"
+        "&#x2022; Go to API Keys → Create key<br/>"
+        "&#x2022; Add $5 credit — enough for hundreds of summaries"
+        "</div></div>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        "<div style='background:#111; border:1px solid #2a2a2a;"
+        " border-left:3px solid #c9a96e; border-radius:8px; padding:0.8rem 1.2rem;'>"
+        "<div style='font-size:0.82rem; color:#888;'>"
+        "💡 <b style='color:#b8a88a;'>Tip:</b> Set a monthly spending limit of $10 on "
+        "both accounts so you are never surprised. "
+        "OpenAI: Settings → Limits. Anthropic: Billing → Usage limits."
+        "</div></div>",
+        unsafe_allow_html=True
+    )
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# FEEDBACK TAB
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_feedback:
+    st.markdown(
+        "<div class='about-box'>"
+        "Your feedback helps improve this app. Share your experience, suggestions, "
+        "or report any issues. We read every message."
+        "</div>",
+        unsafe_allow_html=True
+    )
+
+    with st.form("feedback_form"):
+        col1, col2 = st.columns(2)
+        with col1:
+            name = st.text_input(
+                "Your Name *",
+                placeholder="e.g. Ramesh Kumar"
+            )
+        with col2:
+            email = st.text_input(
+                "Your Email Address *",
+                placeholder="e.g. ramesh@gmail.com"
+            )
+
+        transcription_text = st.text_area(
+            "Paste a sample of the transcription (optional)",
+            placeholder="Paste a few lines from your transcription here so we can review quality...",
+            height=80
+        )
+
+        col3, col4 = st.columns(2)
+        with col3:
+            mode_used = st.selectbox(
+                "Summary mode used",
+                ["Bullet highlights", "Main takeaways", "Detailed paragraphs",
+                 "Executive brief", "Academic digest", "Structured table", "Full transcript"]
+            )
+        with col4:
+            language_used = st.selectbox(
+                "Language tested",
+                ["English", "Hindi", "Kannada", "Telugu", "Tamil",
+                 "Marathi", "Gujarati", "Other"]
+            )
+
+        rating = st.select_slider(
+            "Rate your experience",
+            options=["⭐ Poor", "⭐⭐ Fair", "⭐⭐⭐ Good",
+                     "⭐⭐⭐⭐ Very Good", "⭐⭐⭐⭐⭐ Excellent"],
+            value="⭐⭐⭐⭐⭐ Excellent"
+        )
+
+        message = st.text_area(
+            "Your feedback / suggestions *",
+            placeholder="Share your experience, suggestions, or any issues you faced...",
+            height=100
+        )
+
+        submitted = st.form_submit_button("📧 Submit Feedback")
+
+        if submitted:
+            if not name or not email or not message:
+                st.warning("⚠️ Please fill in Name, Email, and Feedback fields.")
+            else:
+                import urllib.parse
+                subject = f"Wisdom Distiller Feedback — {mode_used} — {language_used}"
+                body = (
+                    f"Name: {name}\n"
+                    f"Email: {email}\n"
+                    f"Language tested: {language_used}\n"
+                    f"Mode used: {mode_used}\n"
+                    f"Rating: {rating}\n\n"
+                    f"Transcription sample:\n{transcription_text or 'Not provided'}\n\n"
+                    f"Feedback:\n{message}"
+                )
+                mailto = (
+                    "mailto:vedantavani.manana@gmail.com"
+                    f"?subject={urllib.parse.quote(subject)}"
+                    f"&body={urllib.parse.quote(body)}"
+                )
+                st.success("✅ Thank you, " + name + "! Your feedback is ready to send.")
+                st.markdown(
+                    "<div style='background:#111; border:1px solid #2a2a2a;"
+                    " border-left:3px solid #c9a96e; border-radius:8px;"
+                    " padding:1rem 1.2rem; margin-top:0.5rem;'>"
+                    "<div style='font-size:0.83rem; color:#aaa; margin-bottom:0.6rem;'>"
+                    "Click the button below to open your email app — "
+                    "your feedback is pre-filled and ready to send to "
+                    "<b style='color:#c9a96e;'>vedantavani.manana@gmail.com</b>"
+                    "</div>"
+                    f"<a href='{mailto}' style='display:inline-block; background:#c9a96e;"
+                    " color:#0a0a0a; padding:8px 20px; border-radius:8px;"
+                    " text-decoration:none; font-size:0.85rem; font-weight:500;'>"
+                    "📧 Open Email App to Send"
+                    "</a></div>",
+                    unsafe_allow_html=True
+                )
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SHARE TAB
