@@ -299,45 +299,122 @@ def translate_text(text, language, anthropic_key):
 
 # ── PDF export ─────────────────────────────────────────────────────────────────
 
+def _parse_markdown_table(content: str):
+    """Parse markdown table into (headers, rows). Returns None if not a table."""
+    lines = [l.strip() for l in content.strip().split("\n") if l.strip()]
+    table_lines = [l for l in lines if l.startswith("|")]
+    if len(table_lines) < 2:
+        return None
+    def is_sep(row):
+        return all(set(c.replace("-","").replace(":","").strip()) <= {""} for c in row)
+    rows = []
+    for line in table_lines:
+        cells = [c.strip() for c in line.split("|")[1:-1]]
+        if not is_sep(cells):
+            rows.append(cells)
+    if len(rows) < 2:
+        return None
+    return rows[0], rows[1:]
+
+
 def make_pdf(title: str, content: str) -> bytes:
-    """Generate a PDF from text content using reportlab."""
-    from reportlab.lib.pagesizes import A4
+    """Generate a PDF from text content using reportlab. Renders tables as real tables."""
+    from reportlab.lib.pagesizes import A4, landscape
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import cm
     from reportlab.lib import colors
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
-    from reportlab.lib.enums import TA_CENTER
+    from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer,
+                                     Table, TableStyle)
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT
     import io
 
+    # Detect if content is a table
+    parsed = _parse_markdown_table(content)
+    is_table = parsed is not None
+
+    # Use landscape for tables to give more room
+    pagesize = landscape(A4) if is_table else A4
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
-        buffer, pagesize=A4,
-        leftMargin=2.5*cm, rightMargin=2.5*cm,
-        topMargin=2.5*cm, bottomMargin=2.5*cm
+        buffer, pagesize=pagesize,
+        leftMargin=1.5*cm, rightMargin=1.5*cm,
+        topMargin=2*cm, bottomMargin=2*cm
     )
     styles = getSampleStyleSheet()
 
     title_style = ParagraphStyle(
         "CustomTitle", parent=styles["Title"],
-        fontSize=18, textColor=colors.HexColor("#c9a96e"),
+        fontSize=16, textColor=colors.HexColor("#c9a96e"),
         spaceAfter=12, alignment=TA_CENTER
     )
     body_style = ParagraphStyle(
         "CustomBody", parent=styles["Normal"],
-        fontSize=11, leading=16, spaceAfter=8,
+        fontSize=10, leading=15, spaceAfter=8,
         textColor=colors.HexColor("#222222")
+    )
+    cell_style = ParagraphStyle(
+        "CellStyle", parent=styles["Normal"],
+        fontSize=8.5, leading=12,
+        textColor=colors.HexColor("#111111"),
+        wordWrap="CJK"
+    )
+    header_style = ParagraphStyle(
+        "HeaderStyle", parent=styles["Normal"],
+        fontSize=9, leading=12, fontName="Helvetica-Bold",
+        textColor=colors.HexColor("#ffffff"),
+        alignment=TA_CENTER
     )
 
     story = [Paragraph(title, title_style), Spacer(1, 0.4*cm)]
 
-    for line in content.split("\n"):
-        if line.strip():
-            safe = (line.replace("&", "&amp;")
-                       .replace("<", "&lt;")
-                       .replace(">", "&gt;"))
-            story.append(Paragraph(safe, body_style))
-        else:
-            story.append(Spacer(1, 0.2*cm))
+    if is_table:
+        headers, rows = parsed
+        # Build table data with Paragraphs for wrapping
+        table_data = [[Paragraph(h, header_style) for h in headers]]
+        for row in rows:
+            # Pad row if needed
+            while len(row) < len(headers):
+                row.append("")
+            table_data.append([Paragraph(c, cell_style) for c in row])
+
+        # Calculate column widths — distribute evenly
+        page_w = landscape(A4)[0] - 3*cm
+        col_w = page_w / len(headers)
+        col_widths = [col_w] * len(headers)
+
+        tbl = Table(table_data, colWidths=col_widths, repeatRows=1)
+        tbl.setStyle(TableStyle([
+            # Header row
+            ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#c9a96e")),
+            ("TEXTCOLOR",  (0,0), (-1,0), colors.white),
+            ("FONTNAME",   (0,0), (-1,0), "Helvetica-Bold"),
+            ("FONTSIZE",   (0,0), (-1,0), 9),
+            ("ALIGN",      (0,0), (-1,0), "CENTER"),
+            ("VALIGN",     (0,0), (-1,-1), "TOP"),
+            # Data rows — alternating background
+            ("ROWBACKGROUNDS", (0,1), (-1,-1),
+             [colors.HexColor("#f9f6f0"), colors.HexColor("#ffffff")]),
+            ("FONTNAME",   (0,1), (-1,-1), "Helvetica"),
+            ("FONTSIZE",   (0,1), (-1,-1), 8.5),
+            # Grid
+            ("GRID",       (0,0), (-1,-1), 0.5, colors.HexColor("#cccccc")),
+            ("LINEBELOW",  (0,0), (-1,0),  1.5, colors.HexColor("#b8935a")),
+            # Padding
+            ("TOPPADDING",    (0,0), (-1,-1), 5),
+            ("BOTTOMPADDING", (0,0), (-1,-1), 5),
+            ("LEFTPADDING",   (0,0), (-1,-1), 6),
+            ("RIGHTPADDING",  (0,0), (-1,-1), 6),
+        ]))
+        story.append(tbl)
+    else:
+        for line in content.split("\n"):
+            if line.strip():
+                safe = (line.replace("&", "&amp;")
+                           .replace("<", "&lt;")
+                           .replace(">", "&gt;"))
+                story.append(Paragraph(safe, body_style))
+            else:
+                story.append(Spacer(1, 0.2*cm))
 
     doc.build(story)
     return buffer.getvalue()
@@ -346,31 +423,95 @@ def make_pdf(title: str, content: str) -> bytes:
 # ── DOCX export ────────────────────────────────────────────────────────────────
 
 def make_docx(title: str, content: str) -> bytes:
-    """Generate a DOCX from text content using python-docx."""
+    """Generate a DOCX from text content. Renders markdown tables as real Word tables."""
     from docx import Document
-    from docx.shared import Pt, RGBColor
+    from docx.shared import Pt, RGBColor, Cm
     from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.oxml.ns import qn
+    from docx.oxml import OxmlElement
     import io
 
     doc = Document()
+
+    # Set landscape for tables
+    parsed = _parse_markdown_table(content)
+    is_table = parsed is not None
+
+    if is_table:
+        section = doc.sections[0]
+        section.orientation = 1  # landscape
+        section.page_width, section.page_height = section.page_height, section.page_width
+
     heading = doc.add_heading(title, level=0)
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
     for run in heading.runs:
         run.font.color.rgb = RGBColor(0xC9, 0xA9, 0x6E)
-        run.font.size = Pt(20)
+        run.font.size = Pt(18)
 
     doc.add_paragraph()
 
-    for line in content.split("\n"):
-        if line.startswith("## "):
-            doc.add_heading(line[3:], level=2)
-        elif line.startswith("# "):
-            doc.add_heading(line[2:], level=1)
-        elif line.startswith("- ") or line.startswith("* "):
-            p = doc.add_paragraph(style="List Bullet")
-            p.add_run(line[2:])
-        elif line.strip():
-            doc.add_paragraph(line)
+    if is_table:
+        headers, rows = parsed
+
+        # Add Word table
+        num_cols = len(headers)
+        tbl = doc.add_table(rows=1 + len(rows), cols=num_cols)
+        tbl.style = "Table Grid"
+
+        # Header row
+        hdr_cells = tbl.rows[0].cells
+        for i, h in enumerate(headers):
+            hdr_cells[i].text = h
+            run = hdr_cells[i].paragraphs[0].runs[0]
+            run.bold = True
+            run.font.size = Pt(9)
+            run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+            # Gold background for header
+            tc = hdr_cells[i]._tc
+            tcPr = tc.get_or_add_tcPr()
+            shd = OxmlElement("w:shd")
+            shd.set(qn("w:val"), "clear")
+            shd.set(qn("w:color"), "auto")
+            shd.set(qn("w:fill"), "C9A96E")
+            tcPr.append(shd)
+
+        # Data rows
+        for r_idx, row in enumerate(rows):
+            while len(row) < num_cols:
+                row.append("")
+            row_cells = tbl.rows[r_idx + 1].cells
+            # Alternating row background
+            fill_color = "F9F6F0" if r_idx % 2 == 0 else "FFFFFF"
+            for c_idx, cell_text in enumerate(row):
+                row_cells[c_idx].text = cell_text
+                run = row_cells[c_idx].paragraphs[0].runs
+                if run:
+                    run[0].font.size = Pt(8)
+                # Row background
+                tc = row_cells[c_idx]._tc
+                tcPr = tc.get_or_add_tcPr()
+                shd = OxmlElement("w:shd")
+                shd.set(qn("w:val"), "clear")
+                shd.set(qn("w:color"), "auto")
+                shd.set(qn("w:fill"), fill_color)
+                tcPr.append(shd)
+
+        # Auto-fit columns
+        for col in tbl.columns:
+            for cell in col.cells:
+                cell.width = Cm(5)
+
+    else:
+        for line in content.split("\n"):
+            if line.startswith("## "):
+                doc.add_heading(line[3:], level=2)
+            elif line.startswith("# "):
+                doc.add_heading(line[2:], level=1)
+            elif line.startswith("- ") or line.startswith("* "):
+                p = doc.add_paragraph(style="List Bullet")
+                p.add_run(line[2:])
+            elif line.strip():
+                doc.add_paragraph(line)
 
     buf = io.BytesIO()
     doc.save(buf)
@@ -438,3 +579,4 @@ TABLE_CSS = (
     "table td:last-child, table th:last-child { border-right: none; }"
     "</style>"
 )
+
