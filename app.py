@@ -19,13 +19,7 @@ st.set_page_config(
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
 # ── iPhone home screen icon ────────────────────────────────────────────────────
-om_icon_path = Path(__file__).parent / "Om.jpeg"
-if om_icon_path.exists():
-    om_icon_b64 = img_b64(str(om_icon_path))
-    st.markdown(
-        f'<link rel="apple-touch-icon" href="{om_icon_b64}">',
-        unsafe_allow_html=True
-    )
+
 
 # Nav card button styling
 st.markdown("""
@@ -56,6 +50,13 @@ def img_b64(path: str, mime: str = "image/jpeg") -> str:
 om_path = Path(__file__).parent / "Om.jpeg"
 om_tag = (f'<img class="om" src="{img_b64(str(om_path))}" alt="Om"/>'
           if om_path.exists() else '<div style="font-size:2.5rem">🕉️</div>')
+
+# iPhone home screen icon — must be after img_b64 is defined
+if om_path.exists():
+    st.markdown(
+        '<link rel="apple-touch-icon" href="' + img_b64(str(om_path)) + '">',
+        unsafe_allow_html=True
+    )
 
 headshot_path = Path(__file__).parent / "headshot.jpeg"
 if headshot_path.exists():
@@ -351,4 +352,3 @@ st.markdown(
     "</div></div>",
     unsafe_allow_html=True
 )
-
