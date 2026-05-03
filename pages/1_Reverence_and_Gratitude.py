@@ -43,32 +43,57 @@ st.markdown("""
 
 
 # ── Pranams block ──────────────────────────────────────────────────────────────
-st.markdown("""
-<div style="max-width:660px; margin: 0 auto;">
-    <div style="background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;
-                border-radius:12px; padding:2rem 2.2rem; margin-bottom:2rem;">
-        <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem;
-                    color:#c9a96e; font-weight:600; letter-spacing:0.5px; margin-bottom:1.2rem;">
-            🔹 Pranāms &amp; Gratitude
-        </div>
-        <div style="font-size:0.95rem; color:#aaa; line-height:1.9; font-style:italic;">
-            I offer my humble pranāms and heartfelt gratitude to
-            <span style="color:#c9a96e; font-style:normal; font-weight:500;">
-                Pūjya Swami Aparājitānandajī
-            </span>
-            and
-            <span style="color:#c9a96e; font-style:normal; font-weight:500;">
-                Pūjya Swāmī Śaraṇānanda jī
-            </span>.
-        </div>
-        <div style="font-size:0.93rem; color:#888; line-height:1.9; margin-top:1rem;">
-            Their teachings, guidance, and unwavering dedication to the
-            <span style="color:#b8a88a;">Guru–Śiṣya Paramparā</span>
-            continue to inspire and shape this humble effort.
-        </div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    "<div style='max-width:680px; margin:0 auto;'>"
+
+    # ── Main card ──────────────────────────────────────────────────────────────
+    "<div style='background:#111; border:1px solid #2a2a2a; border-left:3px solid #c9a96e;"
+    " border-radius:12px; padding:2rem 2.2rem; margin-bottom:1.5rem;'>"
+
+    "<div style='font-family:Cormorant Garamond,serif; font-size:1.1rem;"
+    " color:#c9a96e; font-weight:600; letter-spacing:0.5px; margin-bottom:1.4rem;'>"
+    "🔹 Pranāms &amp; Gratitude"
+    "</div>"
+
+    # Opening salutation
+    "<div style='font-size:0.95rem; color:#aaa; line-height:2; font-style:italic;"
+    " margin-bottom:1rem;'>"
+    "With deep reverence, I offer my humble pranāms and heartfelt gratitude to "
+    "<span style='color:#c9a96e; font-style:normal; font-weight:500;'>"
+    "Swami Aparājitānandajī</span> and "
+    "<span style='color:#c9a96e; font-style:normal; font-weight:500;'>"
+    "Swāmī Śaraṇānandajī</span>."
+    "</div>"
+
+    # Para 1
+    "<div style='font-size:0.92rem; color:#999; line-height:2; margin-bottom:1rem;"
+    " border-top:1px solid #1e1e1e; padding-top:1rem;'>"
+    "Their illuminating discourses, compassionate guidance, and unwavering dedication "
+    "to the sacred "
+    "<span style='color:#b8a88a;'>Guru–Śiṣya Paramparā</span> "
+    "continue to inspire and shape this humble effort."
+    "</div>"
+
+    # Para 2
+    "<div style='font-size:0.92rem; color:#999; line-height:2; margin-bottom:1rem;'>"
+    "The clarity with which they unfold the timeless wisdom of "
+    "<span style='color:#b8a88a;'>Vedanta</span>, "
+    "along with their tireless commitment to making these teachings accessible "
+    "to sincere seekers, forms the very foundation of this discourse summary app."
+    "</div>"
+
+    # Para 3 — offering
+    "<div style='font-family:Cormorant Garamond,serif; font-size:1rem; color:#c9a96e;"
+    " line-height:2; font-style:italic; border-top:1px solid #1e1e1e; padding-top:1rem;'>"
+    "This initiative is but a small offering — an attempt to distill, preserve, "
+    "and share their profound insights — so that more seekers may listen, "
+    "reflect (<span style='font-style:normal;'>manana</span>), and internalize "
+    "these teachings with greater ease, devotion, and depth."
+    "</div>"
+
+    "</div></div>",
+    unsafe_allow_html=True
+)
 
 
 # ── Quote block ────────────────────────────────────────────────────────────────
