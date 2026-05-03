@@ -259,6 +259,8 @@ LANGUAGES = {
     'Kannada (ಕನ್ನಡ)': 'Kannada',
     'Telugu (తెలుగు)': 'Telugu',
     'Tamil (தமிழ்)': 'Tamil',
+    'Marathi (मराठी)': 'Marathi',
+    'Gujarati (ગુજરાતી)': 'Gujarati',
 }
 
 def translate_text(text, language, anthropic_key):
