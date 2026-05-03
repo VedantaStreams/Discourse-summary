@@ -9,6 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from utils.styles import SHARED_CSS
+from utils.usage_tracker import check_usage_limit, increment_usage, show_usage_badge
 from utils.helpers import (
     extract_audio_from_video,
     clean_youtube_url,
@@ -274,7 +275,10 @@ if audio_ready_path and os.path.exists(audio_ready_path):
         unsafe_allow_html=True
     )
 
+    show_usage_badge()
     if st.button("🚀 Transcribe & Summarize", key="vid_process"):
+        if not check_usage_limit():
+            st.stop()
         try:
             progress_bar = st.progress(0)
             status_text = st.empty()
@@ -296,6 +300,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
             )
             progress_bar.progress(1.0)
             status_text.markdown("✅ **Done!**")
+            increment_usage()
 
             st.session_state.pop("video_audio_path", None)
 
