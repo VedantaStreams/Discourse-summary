@@ -18,6 +18,15 @@ st.set_page_config(
 
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
 
+# ── iPhone home screen icon ────────────────────────────────────────────────────
+om_icon_path = Path(__file__).parent / "Om.jpeg"
+if om_icon_path.exists():
+    om_icon_b64 = img_b64(str(om_icon_path))
+    st.markdown(
+        f'<link rel="apple-touch-icon" href="{om_icon_b64}">',
+        unsafe_allow_html=True
+    )
+
 # Nav card button styling
 st.markdown("""
 <style>
@@ -248,6 +257,65 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# ── Live visitor + session counter ────────────────────────────────────────────
+try:
+    import json
+    from datetime import datetime
+
+    counter_file = Path(__file__).parent / "usage_data.json"
+    visitors_file = Path(__file__).parent / "visitor_log.json"
+
+    # Count unique users from usage_data
+    total_users = 0
+    total_sessions = 0
+    if counter_file.exists():
+        data = json.loads(counter_file.read_text())
+        total_users = len(data)
+        total_sessions = sum(data.values())
+
+    # Track page visitors (new visit = new session_state)
+    if "page_visit_counted" not in st.session_state:
+        st.session_state["page_visit_counted"] = True
+        visit_data = {}
+        if visitors_file.exists():
+            visit_data = json.loads(visitors_file.read_text())
+        today = datetime.now().strftime("%Y-%m-%d")
+        visit_data[today] = visit_data.get(today, 0) + 1
+        visitors_file.write_text(json.dumps(visit_data))
+
+    # Count total page visits
+    total_visits = 0
+    if visitors_file.exists():
+        visit_data = json.loads(visitors_file.read_text())
+        total_visits = sum(visit_data.values())
+
+    st.markdown(
+        "<div style='text-align:center; padding:1rem 0 0.5rem;'>"
+        "<div style='display:inline-flex; gap:2rem; background:#111; border:1px solid #1e1e1e;"
+        " border-radius:10px; padding:0.6rem 2rem;'>"
+        f"<div style='text-align:center;'>"
+        f"<div style='font-family:Cormorant Garamond,serif; font-size:1.4rem;"
+        f" color:#c9a96e; font-weight:600;'>{total_visits}</div>"
+        f"<div style='font-size:0.7rem; color:#555; text-transform:uppercase;"
+        f" letter-spacing:0.5px;'>Page Visits</div></div>"
+        f"<div style='width:1px; background:#2a2a2a;'></div>"
+        f"<div style='text-align:center;'>"
+        f"<div style='font-family:Cormorant Garamond,serif; font-size:1.4rem;"
+        f" color:#c9a96e; font-weight:600;'>{total_users}</div>"
+        f"<div style='font-size:0.7rem; color:#555; text-transform:uppercase;"
+        f" letter-spacing:0.5px;'>Users</div></div>"
+        f"<div style='width:1px; background:#2a2a2a;'></div>"
+        f"<div style='text-align:center;'>"
+        f"<div style='font-family:Cormorant Garamond,serif; font-size:1.4rem;"
+        f" color:#c9a96e; font-weight:600;'>{total_sessions}</div>"
+        f"<div style='font-size:0.7rem; color:#555; text-transform:uppercase;"
+        f" letter-spacing:0.5px;'>Sessions</div></div>"
+        "</div></div>",
+        unsafe_allow_html=True
+    )
+except Exception:
+    pass
+
 # ── Visitor counter ────────────────────────────────────────────────────────────
 if "visited" not in st.session_state:
     st.session_state["visited"] = True
@@ -283,3 +351,4 @@ st.markdown(
     "</div></div>",
     unsafe_allow_html=True
 )
+
