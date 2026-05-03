@@ -212,7 +212,6 @@ of modern AI.
 
 *With pranāms* 🙏
 
-###### Powered by OpenAI Whisper · Anthropic Claude · Streamlit
 ---
 
 ## 🔧 Troubleshooting
