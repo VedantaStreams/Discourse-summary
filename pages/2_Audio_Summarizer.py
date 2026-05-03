@@ -7,6 +7,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from utils.styles import SHARED_CSS
+from utils.usage_tracker import check_usage_limit, increment_usage, show_usage_badge
 from utils.helpers import (
     prepare_audio_chunks, transcribe_chunks,
     summarize_text, translate_text, make_pdf, make_docx,
@@ -103,7 +104,10 @@ if uploaded_files:
 
     # ── Process ────────────────────────────────────────────────────────────────
     st.markdown('<div class="step-label">Step 3 — Process</div>', unsafe_allow_html=True)
+    show_usage_badge()
     if st.button("🚀 Transcribe & Summarize"):
+        if not check_usage_limit():
+            st.stop()
         try:
             progress_bar = st.progress(0)
             status_text = st.empty()
@@ -127,6 +131,7 @@ if uploaded_files:
                 transcript = translate_text(transcript, target_lang, anthropic_key)
             progress_bar.progress(1.0)
             status_text.markdown("✅ **Done!**")
+            increment_usage()
 
             st.markdown("---")
             st.markdown('<div class="step-label">Results</div>', unsafe_allow_html=True)
