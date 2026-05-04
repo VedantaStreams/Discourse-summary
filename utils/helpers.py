@@ -416,95 +416,168 @@ def _parse_markdown_table(content: str):
 
 
 def make_pdf(title: str, content: str) -> bytes:
-    """Generate a PDF from text content using reportlab.
-    Uses Unicode fonts to correctly render Sanskrit and Indian language text."""
+    """Generate a PDF using weasyprint for full Unicode/Indian script support.
+    Falls back to reportlab if weasyprint is unavailable."""
+    try:
+        return _make_pdf_weasyprint(title, content)
+    except Exception:
+        return _make_pdf_reportlab(title, content)
+
+
+def _weasyprint_write_pdf(html_string):
+    """Write PDF with Telugu font subsetting bug workaround."""
+    from weasyprint import HTML
+    import fontTools.ttLib.tables.O_S_2f_2 as os2_module
+
+    def safe_set_unicode_ranges(self, bits):
+        bits = {b for b in bits if 0 <= b <= 122}
+        original_set(self, bits)
+
+    original_set = os2_module.table_O_S_2f_2.setUnicodeRanges
+    os2_module.table_O_S_2f_2.setUnicodeRanges = safe_set_unicode_ranges
+    try:
+        return HTML(string=html_string).write_pdf()
+    finally:
+        os2_module.table_O_S_2f_2.setUnicodeRanges = original_set
+
+
+def _make_pdf_weasyprint(title: str, content: str) -> bytes:
+    """PDF via weasyprint — supports all Indian scripts natively.
+    Includes fix for Telugu Unicode range bug in fonttools."""
+    from weasyprint import HTML
+
+    parsed = _parse_markdown_table(content)
+    is_table = parsed is not None
+
+    if is_table:
+        headers, rows = parsed
+        header_cells = "".join(f"<th>{h}</th>" for h in headers)
+        body_rows = ""
+        for i, row in enumerate(rows):
+            while len(row) < len(headers):
+                row.append("")
+            bg = "#f9f6f0" if i % 2 == 0 else "#ffffff"
+            cells = "".join(f"<td>{c}</td>" for c in row)
+            body_rows += f'<tr style="background:{bg};">{cells}</tr>'
+        main_content = (
+            f"<table><thead><tr>{header_cells}</tr></thead>"
+            f"<tbody>{body_rows}</tbody></table>"
+        )
+        landscape = "size: A4 landscape;"
+    else:
+        paragraphs = ""
+        for line in content.split("\n"):
+            if line.startswith("## "):
+                paragraphs += f"<h2>{line[3:]}</h2>"
+            elif line.startswith("# "):
+                paragraphs += f"<h1>{line[2:]}</h1>"
+            elif line.startswith("- ") or line.startswith("* "):
+                paragraphs += f"<li>{line[2:]}</li>"
+            elif line.strip():
+                paragraphs += f"<p>{line}</p>"
+        main_content = paragraphs
+        landscape = "size: A4 portrait;"
+
+    html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@page {{ {landscape} margin: 1.5cm; }}
+body {{
+    font-family: FreeSerif, FreeSans, DejaVu Sans, serif;
+    font-size: 10px;
+    color: #111;
+    line-height: 1.6;
+}}
+h1 {{ font-size: 18px; color: #c9a96e; text-align: center; margin-bottom: 16px; }}
+h2 {{ font-size: 14px; color: #333; margin-top: 12px; }}
+p {{ margin: 4px 0 8px; }}
+li {{ margin: 3px 0; }}
+table {{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    page-break-inside: auto;
+}}
+thead tr {{
+    background: #c9a96e;
+    color: white;
+}}
+th {{
+    padding: 7px 8px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9px;
+    border: 1px solid #b8935a;
+}}
+td {{
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    line-height: 1.5;
+}}
+tr {{ page-break-inside: avoid; }}
+</style>
+</head>
+<body>
+<h1>{title}</h1>
+{main_content}
+</body>
+</html>"""
+
+    return _weasyprint_write_pdf(html)
+
+
+def _make_pdf_reportlab(title: str, content: str) -> bytes:
+    """Fallback PDF via reportlab with FreeSerif font."""
     from reportlab.lib.pagesizes import A4, landscape
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import cm
     from reportlab.lib import colors
     from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer,
                                      Table, TableStyle)
-    from reportlab.lib.enums import TA_CENTER, TA_LEFT
+    from reportlab.lib.enums import TA_CENTER
     import io
 
-    # Use globally registered Unicode fonts
     base_font, bold_font = _BASE_FONT, _BOLD_FONT
-
-    # Detect if content is a table
     parsed = _parse_markdown_table(content)
     is_table = parsed is not None
-
     pagesize = landscape(A4) if is_table else A4
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(
-        buffer, pagesize=pagesize,
-        leftMargin=1.5*cm, rightMargin=1.5*cm,
-        topMargin=2*cm, bottomMargin=2*cm
-    )
+    doc = SimpleDocTemplate(buffer, pagesize=pagesize,
+                            leftMargin=1.5*cm, rightMargin=1.5*cm,
+                            topMargin=2*cm, bottomMargin=2*cm)
     styles = getSampleStyleSheet()
-
-    title_style = ParagraphStyle(
-        "CustomTitle", parent=styles["Title"],
-        fontName=bold_font,
-        fontSize=16, textColor=colors.HexColor("#c9a96e"),
-        spaceAfter=12, alignment=TA_CENTER
-    )
-    body_style = ParagraphStyle(
-        "CustomBody", parent=styles["Normal"],
-        fontName=base_font,
-        fontSize=10, leading=16, spaceAfter=8,
-        textColor=colors.HexColor("#222222")
-    )
-    cell_style = ParagraphStyle(
-        "CellStyle", parent=styles["Normal"],
-        fontName=base_font,
-        fontSize=8.5, leading=13,
-        textColor=colors.HexColor("#111111"),
-        wordWrap="CJK"
-    )
-    header_style = ParagraphStyle(
-        "HeaderStyle", parent=styles["Normal"],
-        fontName=bold_font,
-        fontSize=9, leading=12,
-        textColor=colors.HexColor("#ffffff"),
-        alignment=TA_CENTER
-    )
-
+    title_style = ParagraphStyle("T", parent=styles["Title"], fontName=bold_font,
+                                  fontSize=16, textColor=colors.HexColor("#c9a96e"),
+                                  spaceAfter=12, alignment=TA_CENTER)
+    body_style = ParagraphStyle("B", parent=styles["Normal"], fontName=base_font,
+                                 fontSize=10, leading=16, spaceAfter=8,
+                                 textColor=colors.HexColor("#222222"))
+    cell_style = ParagraphStyle("C", parent=styles["Normal"], fontName=base_font,
+                                 fontSize=8.5, leading=13, wordWrap="CJK")
+    header_style = ParagraphStyle("H", parent=styles["Normal"], fontName=bold_font,
+                                   fontSize=9, leading=12,
+                                   textColor=colors.white, alignment=TA_CENTER)
     story = [Paragraph(title, title_style), Spacer(1, 0.4*cm)]
-
     if is_table:
         headers, rows = parsed
-        # Build table data with Paragraphs for wrapping
         table_data = [[Paragraph(h, header_style) for h in headers]]
         for row in rows:
-            # Pad row if needed
             while len(row) < len(headers):
                 row.append("")
             table_data.append([Paragraph(c, cell_style) for c in row])
-
-        # Calculate column widths — distribute evenly
         page_w = landscape(A4)[0] - 3*cm
         col_w = page_w / len(headers)
-        col_widths = [col_w] * len(headers)
-
-        tbl = Table(table_data, colWidths=col_widths, repeatRows=1)
+        tbl = Table(table_data, colWidths=[col_w]*len(headers), repeatRows=1)
         tbl.setStyle(TableStyle([
-            # Header row
             ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#c9a96e")),
             ("TEXTCOLOR",  (0,0), (-1,0), colors.white),
-            ("FONTNAME",   (0,0), (-1,0), "Helvetica-Bold"),
-            ("FONTSIZE",   (0,0), (-1,0), 9),
-            ("ALIGN",      (0,0), (-1,0), "CENTER"),
             ("VALIGN",     (0,0), (-1,-1), "TOP"),
-            # Data rows — alternating background
             ("ROWBACKGROUNDS", (0,1), (-1,-1),
              [colors.HexColor("#f9f6f0"), colors.HexColor("#ffffff")]),
-            ("FONTNAME",   (0,1), (-1,-1), "Helvetica"),
-            ("FONTSIZE",   (0,1), (-1,-1), 8.5),
-            # Grid
-            ("GRID",       (0,0), (-1,-1), 0.5, colors.HexColor("#cccccc")),
-            ("LINEBELOW",  (0,0), (-1,0),  1.5, colors.HexColor("#b8935a")),
-            # Padding
+            ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#cccccc")),
             ("TOPPADDING",    (0,0), (-1,-1), 5),
             ("BOTTOMPADDING", (0,0), (-1,-1), 5),
             ("LEFTPADDING",   (0,0), (-1,-1), 6),
@@ -514,18 +587,13 @@ def make_pdf(title: str, content: str) -> bytes:
     else:
         for line in content.split("\n"):
             if line.strip():
-                safe = (line.replace("&", "&amp;")
-                           .replace("<", "&lt;")
-                           .replace(">", "&gt;"))
+                safe = (line.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;"))
                 story.append(Paragraph(safe, body_style))
             else:
                 story.append(Spacer(1, 0.2*cm))
-
     doc.build(story)
     return buffer.getvalue()
 
-
-# ── DOCX export ────────────────────────────────────────────────────────────────
 
 def make_docx(title: str, content: str) -> bytes:
     """Generate a DOCX from text content. Renders markdown tables as real Word tables."""
@@ -687,6 +755,7 @@ TABLE_CSS = (
     "table td:last-child, table th:last-child { border-right: none; }"
     "</style>"
 )
+
 
 
 
