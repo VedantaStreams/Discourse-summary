@@ -8,7 +8,7 @@ if str(ROOT) not in sys.path:
 
 from utils.styles import SHARED_CSS
 from utils.usage_tracker import check_usage_limit, increment_usage, show_usage_badge
-from utils.helpers import summarize_text, translate_text, make_pdf, make_docx, TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS, LANGUAGES
+from utils.helpers import summarize_text, translate_text, analyze_discourse, make_pdf, make_docx, TABLE_COLUMNS, markdown_table_to_html, TABLE_CSS, LANGUAGES
 
 st.set_page_config(page_title="Document Combiner · Wisdom Distiller", page_icon="📄", layout="centered")
 st.markdown(SHARED_CSS, unsafe_allow_html=True)
