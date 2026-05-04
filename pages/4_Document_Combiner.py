@@ -148,14 +148,14 @@ if uploaded_files:
                 unsafe_allow_html=True)
     st.markdown(
         "<div style='font-size:0.83rem; color:#888; margin-bottom:0.6rem;'>"
-        "Providing these details improves the insights panel accuracy. Leave blank if unknown."
+        "Speaker name cannot be auto-detected unless mentioned in the audio. Please enter details here for accurate insights."
         "</div>",
         unsafe_allow_html=True
     )
     dc1, dc2, dc3 = st.columns(3)
     with dc1:
         speaker_hint = st.text_input("🎙️ Speaker name",
-                                     placeholder="e.g. Swami Tejomayananda",
+                                     placeholder="e.g. Swami Tejomayananda  ← required for insights",
                                      key="doc_speaker")
     with dc2:
         topic_hint = st.text_input("📖 Topic / Title",
@@ -306,4 +306,5 @@ if "doc_results" in st.session_state:
     if st.button("🔄 Clear results and start over", key="doc_clear"):
         del st.session_state["doc_results"]
         st.rerun()
+
 
