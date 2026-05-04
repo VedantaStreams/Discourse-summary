@@ -297,6 +297,69 @@ def translate_text(text, language, anthropic_key):
 
 
 
+# ── Discourse Insights ────────────────────────────────────────────────────────
+
+def analyze_discourse(
+    transcript: str,
+    anthropic_key: str,
+    speaker_hint: str = "",
+    topic_hint: str = "",
+    scripture_hint: str = ""
+) -> dict:
+    """Analyze transcript for speaker, topic, scriptures, key terms.
+    Optional hints provided by the user take priority over auto-detection."""
+    import anthropic
+    import json
+    client = anthropic.Anthropic(api_key=anthropic_key)
+
+    # Build context from user hints
+    hints = ""
+    if speaker_hint:
+        hints += f"The speaker is: {speaker_hint}.\n"
+    if topic_hint:
+        hints += f"The topic/text is: {topic_hint}.\n"
+    if scripture_hint:
+        hints += f"The scripture being discussed is: {scripture_hint}.\n"
+    if hints:
+        hints = "Context provided by user:\n" + hints + "\n"
+
+    prompt = (
+        "Analyze the following spiritual discourse transcript and extract structured insights. "
+        + hints +
+        "Use the user-provided context above as authoritative — do not contradict it. "
+        "For anything not provided, infer from the transcript. "
+        "Respond ONLY in this exact JSON format with no extra text:\n"
+        "{\n"
+        '  "speaker": "Name of speaker",\n'
+        '  "topic": "Main topic or theme in one sentence",\n'
+        '  "scripture_text": "Primary scripture being discussed",\n'
+        '  "scriptures": ["Specific verses referenced e.g. Bhagavad Gita 2.20"],\n'
+        '  "key_terms": ["Key Sanskrit terms used"],\n'
+        '  "tradition": "e.g. Advaita Vedanta / Chinmaya Mission / etc."\n'
+        "}\n\n"
+        "Transcript:\n" + transcript[:8000]
+    )
+
+    try:
+        msg = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=600,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        text = msg.content[0].text.strip()
+        text = text.replace("```json", "").replace("```", "").strip()
+        return json.loads(text)
+    except Exception:
+        return {
+            "speaker": speaker_hint or "Unknown",
+            "topic": topic_hint or "Could not determine",
+            "scripture_text": scripture_hint or "Unknown",
+            "scriptures": [],
+            "key_terms": [],
+            "tradition": "Unknown"
+        }
+
+
 # ── PDF export ─────────────────────────────────────────────────────────────────
 
 def _parse_markdown_table(content: str):
