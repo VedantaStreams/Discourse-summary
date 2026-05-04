@@ -298,7 +298,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
     vc1, vc2, vc3 = st.columns(3)
     with vc1:
         speaker_hint = st.text_input("🎙️ Speaker name",
-                                     placeholder="e.g. Swami Tejomayananda",
+                                     placeholder="e.g. Swami Tejomayananda  ← required for insights",
                                      key="vid_speaker")
     with vc2:
         topic_hint = st.text_input("📖 Topic / Title",
@@ -445,3 +445,4 @@ if "video_results" in st.session_state:
     if st.button("🔄 Clear results and start over", key="vid_clear"):
         del st.session_state["video_results"]
         st.rerun()
+
