@@ -380,8 +380,30 @@ def _parse_markdown_table(content: str):
     return rows[0], rows[1:]
 
 
+def _register_unicode_fonts():
+    """Register Unicode-capable fonts for PDF generation."""
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    import os
+
+    fonts = [
+        ("UniSans", "/usr/share/fonts/truetype/freefont/FreeSans.ttf"),
+        ("UniSansBold", "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf"),
+    ]
+    registered = []
+    for name, path in fonts:
+        if os.path.exists(path):
+            try:
+                pdfmetrics.registerFont(TTFont(name, path))
+                registered.append(name)
+            except Exception:
+                pass
+    return "UniSans" if "UniSans" in registered else "Helvetica"
+
+
 def make_pdf(title: str, content: str) -> bytes:
-    """Generate a PDF from text content using reportlab. Renders tables as real tables."""
+    """Generate a PDF from text content using reportlab.
+    Uses Unicode fonts to correctly render Sanskrit and Indian language text."""
     from reportlab.lib.pagesizes import A4, landscape
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.units import cm
@@ -391,11 +413,14 @@ def make_pdf(title: str, content: str) -> bytes:
     from reportlab.lib.enums import TA_CENTER, TA_LEFT
     import io
 
+    # Register Unicode fonts
+    base_font = _register_unicode_fonts()
+    bold_font = "UniSansBold" if base_font == "UniSans" else "Helvetica-Bold"
+
     # Detect if content is a table
     parsed = _parse_markdown_table(content)
     is_table = parsed is not None
 
-    # Use landscape for tables to give more room
     pagesize = landscape(A4) if is_table else A4
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(
@@ -407,23 +432,27 @@ def make_pdf(title: str, content: str) -> bytes:
 
     title_style = ParagraphStyle(
         "CustomTitle", parent=styles["Title"],
+        fontName=bold_font,
         fontSize=16, textColor=colors.HexColor("#c9a96e"),
         spaceAfter=12, alignment=TA_CENTER
     )
     body_style = ParagraphStyle(
         "CustomBody", parent=styles["Normal"],
-        fontSize=10, leading=15, spaceAfter=8,
+        fontName=base_font,
+        fontSize=10, leading=16, spaceAfter=8,
         textColor=colors.HexColor("#222222")
     )
     cell_style = ParagraphStyle(
         "CellStyle", parent=styles["Normal"],
-        fontSize=8.5, leading=12,
+        fontName=base_font,
+        fontSize=8.5, leading=13,
         textColor=colors.HexColor("#111111"),
         wordWrap="CJK"
     )
     header_style = ParagraphStyle(
         "HeaderStyle", parent=styles["Normal"],
-        fontSize=9, leading=12, fontName="Helvetica-Bold",
+        fontName=bold_font,
+        fontSize=9, leading=12,
         textColor=colors.HexColor("#ffffff"),
         alignment=TA_CENTER
     )
@@ -510,6 +539,7 @@ def make_docx(title: str, content: str) -> bytes:
     for run in heading.runs:
         run.font.color.rgb = RGBColor(0xC9, 0xA9, 0x6E)
         run.font.size = Pt(18)
+        run.font.name = "Arial Unicode MS"  # Unicode font for heading
 
     doc.add_paragraph()
 
@@ -528,6 +558,7 @@ def make_docx(title: str, content: str) -> bytes:
             run = hdr_cells[i].paragraphs[0].runs[0]
             run.bold = True
             run.font.size = Pt(9)
+            run.font.name = "Arial Unicode MS"
             run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
             # Gold background for header
             tc = hdr_cells[i]._tc
@@ -550,6 +581,7 @@ def make_docx(title: str, content: str) -> bytes:
                 run = row_cells[c_idx].paragraphs[0].runs
                 if run:
                     run[0].font.size = Pt(8)
+                    run[0].font.name = "Arial Unicode MS"  # Supports Sanskrit
                 # Row background
                 tc = row_cells[c_idx]._tc
                 tcPr = tc.get_or_add_tcPr()
@@ -642,4 +674,3 @@ TABLE_CSS = (
     "table td:last-child, table th:last-child { border-right: none; }"
     "</style>"
 )
-
