@@ -381,24 +381,40 @@ def _parse_markdown_table(content: str):
 
 
 def _register_unicode_fonts():
-    """Register Unicode-capable fonts for PDF generation."""
+    """Register Unicode-capable fonts for PDF generation.
+    FreeSerif covers Devanagari and all Indian scripts.
+    Falls back through multiple options for compatibility."""
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     import os
 
-    fonts = [
-        ("UniSans", "/usr/share/fonts/truetype/freefont/FreeSans.ttf"),
-        ("UniSansBold", "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf"),
+    # Font candidates — ordered by Unicode coverage (best first)
+    # FreeSerif has the best Devanagari coverage
+    candidates = [
+        ("UniSerif",     "UniSerifBold",
+         "/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
+         "/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf"),
+        ("UniSans",      "UniSansBold",
+         "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+         "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf"),
+        ("UniDejaVu",    "UniDejaVuBold",
+         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+         "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"),
     ]
-    registered = []
-    for name, path in fonts:
-        if os.path.exists(path):
+
+    for reg_name, bold_name, reg_path, bold_path in candidates:
+        if os.path.exists(reg_path):
             try:
-                pdfmetrics.registerFont(TTFont(name, path))
-                registered.append(name)
+                pdfmetrics.registerFont(TTFont(reg_name, reg_path))
+                if os.path.exists(bold_path):
+                    pdfmetrics.registerFont(TTFont(bold_name, bold_path))
+                else:
+                    bold_name = reg_name
+                return reg_name, bold_name
             except Exception:
-                pass
-    return "UniSans" if "UniSans" in registered else "Helvetica"
+                continue
+
+    return "Helvetica", "Helvetica-Bold"
 
 
 def make_pdf(title: str, content: str) -> bytes:
@@ -413,9 +429,8 @@ def make_pdf(title: str, content: str) -> bytes:
     from reportlab.lib.enums import TA_CENTER, TA_LEFT
     import io
 
-    # Register Unicode fonts
-    base_font = _register_unicode_fonts()
-    bold_font = "UniSansBold" if base_font == "UniSans" else "Helvetica-Bold"
+    # Register Unicode fonts — FreeSerif for Devanagari support
+    base_font, bold_font = _register_unicode_fonts()
 
     # Detect if content is a table
     parsed = _parse_markdown_table(content)
@@ -674,3 +689,4 @@ TABLE_CSS = (
     "table td:last-child, table th:last-child { border-right: none; }"
     "</style>"
 )
+
