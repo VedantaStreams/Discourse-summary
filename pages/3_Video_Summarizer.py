@@ -17,6 +17,7 @@ from utils.helpers import (
     transcribe_chunks,
     summarize_text,
     translate_text,
+    analyze_discourse,
     make_pdf,
     make_docx,
     TABLE_COLUMNS,
@@ -234,7 +235,35 @@ if audio_ready_path and os.path.exists(audio_ready_path):
 </div>
 """, unsafe_allow_html=True)
 
-    st.markdown('<div class="step-label">Step 2 — Output Options</div>', unsafe_allow_html=True)
+    st.markdown('<div class="step-label">Step 2 — Discourse Details (Optional)</div>', unsafe_allow_html=True)
+    st.markdown(
+        "<div style='font-size:0.83rem; color:#888; margin-bottom:0.6rem;'>"
+        "Providing these details improves the insights panel accuracy. Leave blank if unknown."
+        "</div>",
+        unsafe_allow_html=True
+    )
+    vc1, vc2, vc3 = st.columns(3)
+    with vc1:
+        speaker_hint = st.text_input(
+            "🎙️ Speaker name",
+            placeholder="e.g. Swami Tejomayananda",
+            key="vid_speaker"
+        )
+    with vc2:
+        topic_hint = st.text_input(
+            "📖 Topic / Title",
+            placeholder="e.g. Nature of the Atman",
+            key="vid_topic"
+        )
+    with vc3:
+        scripture_hint = st.text_input(
+            "📚 Scripture / Text",
+            placeholder="e.g. Bhagavad Gita Chapter 2",
+            key="vid_scripture"
+        )
+    st.markdown("---")
+
+    st.markdown('<div class="step-label">Step 3 — Output Options</div>', unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
     with col1:
@@ -261,6 +290,10 @@ if audio_ready_path and os.path.exists(audio_ready_path):
         if not selected_columns:
             st.warning("Please select at least one column.")
 
+    analyze = st.checkbox(
+        "🔍 Identify speaker, topic & scripture references",
+        value=True, key="vid_analyze"
+    )
     show_transcript = st.checkbox(
         "Show full transcript on page", value=False, key="vid_show_tr"
     )
@@ -271,7 +304,7 @@ if audio_ready_path and os.path.exists(audio_ready_path):
         st.stop()
 
     st.markdown(
-        '<div class="step-label">Step 3 — Transcribe & Summarize</div>',
+        '<div class="step-label">Step 4 — Transcribe & Summarize</div>',
         unsafe_allow_html=True
     )
 
@@ -303,6 +336,13 @@ if audio_ready_path and os.path.exists(audio_ready_path):
             increment_usage()
 
             st.session_state.pop("video_audio_path", None)
+            st.session_state["video_results"] = {
+                "summary": summary,
+                "transcript": transcript,
+                "insights": insights,
+                "summary_style": summary_style,
+                "show_transcript": show_transcript,
+            }
 
             st.markdown("---")
             st.markdown(
